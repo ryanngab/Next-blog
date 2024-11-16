@@ -1,64 +1,88 @@
-// components/blog/CardBlog.tsx
-import React from "react";
-import { Bookmark } from "lucide-react";
+import React from 'react';
+import { useRouter } from 'next/navigation';
+import { Bookmark } from 'lucide-react';
+import { ShareModalWithIcon } from '@/components/modal/ShareModalWithIcon';
 
 interface Post {
-  id: number;
+  id: string;
   image: string;
   title: string;
   content: string;
-  author: string;
+  author: {
+    displayName: string;
+    url: string;
+    image: string;
+  };
   date: string;
 }
 
 interface AllCardBlogProps {
-  posts: Post[];
+  post: Post;
 }
 
-const AllCardBlog: React.FC<AllCardBlogProps> = ({ posts }) => (
-    <>
-    {posts.map((post) => (
+const extractFirstImage = (content: string): string | null => {
+  const imageRegex = /<img[^>]+src=["'](https?[^"']+)["']/;
+  const match = content.match(imageRegex);
+  return match ? match[1] : null;
+};
+
+const truncateTitle = (title: string, maxWords: number): string => {
+  const words = title.split(' ');
+  return words.length > maxWords
+    ? words.slice(0, maxWords).join(' ') + '...'
+    : title;
+};
+
+const AllCardBlog: React.FC<AllCardBlogProps> = ({ post }) => {
+  const router = useRouter();
+  const firstImage = extractFirstImage(post.content);
+  const truncatedTitle = truncateTitle(post.title, 10);
+
+  return (
       <div
-        key={post.id}
-        className="relative overflow-hidden transition-shadow duration-300 border shadow rounded-xl bg-card text-card-foreground hover:shadow-xl group"
+        onClick={() =>
+          router.push(`/blog/${post.id}/${encodeURIComponent(post.title)}`)
+        }
+        className="relative overflow-hidden transition-shadow duration-300 border shadow cursor-pointer group rounded-xl bg-card text-card-foreground hover:shadow-xl"
       >
-        {/* Image with overlay */}
         <div className="relative">
           <img
-            src={`https://${post.image}`}
+            src={firstImage || post.image || 'https://via.placeholder.com/150'}
             alt={post.title}
             className="object-cover w-full h-48"
             loading="lazy"
           />
-
-          {/* Bookmark button without tooltip */}
-          <div className="absolute z-10 top-2 right-2">
+          <div className="absolute z-10 right-2 top-2">
             <button
               aria-label="Bookmark"
-              className="p-2 transition bg-white rounded-full bg-opacity-80 hover:bg-opacity-100"
+              className="p-2 mr-2 transition bg-white rounded-full bg-opacity-80 hover:bg-opacity-100"
             >
               <Bookmark className="w-5 h-5 text-gray-800" />
             </button>
-          </div>
-
-          {/* Overlay for "Read Article" text */}
-          <div className="absolute inset-0 flex items-center justify-center transition-opacity duration-300 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100">
-            <span className="text-lg font-semibold text-white">Read Article</span>
+            <ShareModalWithIcon />
           </div>
         </div>
-
-        {/* Text content */}
         <div className="p-6">
-          <h3 className="mb-2 text-xl font-semibold">{post.title}</h3>
-          <p className="mb-4 text-gray-600">{post.content}</p>
-          <div className="flex items-center justify-between text-sm text-gray-500">
-            <span>{post.author}</span>
+          <h3 className="mb-2 text-lg font-semibold">{truncatedTitle}</h3>{' '}
+          {/* Ukuran font untuk title diperkecil */}
+          <p className="mb-4 text-sm text-gray-600">
+            {' '}
+            {/* Ukuran font untuk description diperkecil */}
+            {post.content
+              .replace(/<[^>]+>/g, '')
+              .split(' ')
+              .slice(0, 20)
+              .join(' ') + '...'}
+          </p>
+          <div className="flex items-center justify-between text-xs text-gray-500">
+            {' '}
+            {/* Ukuran font untuk tanggal dan author diperkecil */}
+            <span>{post.author?.displayName || 'Unknown Author'}</span>
             <span>{post.date}</span>
           </div>
         </div>
       </div>
-    ))}
-    </>
-);
+  );
+};
 
 export default AllCardBlog;

@@ -8,7 +8,7 @@ type BreadcrumbItem = {
   link: string;
 };
 
-// This allows to add custom title as well
+// This allows adding custom title as well
 const routeMapping: Record<string, BreadcrumbItem[]> = {
   '/dashboard': [{ title: 'Dashboard', link: '/dashboard' }],
   '/dashboard/employee': [
@@ -33,10 +33,19 @@ export function useBreadcrumbs() {
 
     // If no exact match, fall back to generating breadcrumbs from the path
     const segments = pathname.split('/').filter(Boolean);
+
     return segments.map((segment, index) => {
       const path = `/${segments.slice(0, index + 1).join('/')}`;
+      
+      // Decode the segment to remove URL encoding (e.g., %20 -> space)
+      const decodedTitle = decodeURIComponent(segment);
+
+      // Limit the title to 10 words
+      const words = decodedTitle.split(' ');
+      const limitedTitle = words.length > 10 ? words.slice(0, 15).join(' ') + '...' : decodedTitle;
+
       return {
-        title: segment.charAt(0).toUpperCase() + segment.slice(1),
+        title: limitedTitle.charAt(0).toUpperCase() + limitedTitle.slice(1), // Capitalize first letter
         link: path
       };
     });
