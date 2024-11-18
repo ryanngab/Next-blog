@@ -1,9 +1,9 @@
-'use client';
+'use client'; // Menandakan bahwa file ini merupakan bagian dari komponen client-side di Next.js
 
 import { useState } from 'react';
-import { FileUploader } from '@/components/file-uploader';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { FileUploader } from '@/components/file-uploader'; // Komponen untuk mengunggah file gambar
+import { Button } from '@/components/ui/button'; // Komponen untuk tombol
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'; // Komponen UI untuk card
 import {
   Form,
   FormControl,
@@ -11,63 +11,72 @@ import {
   FormItem,
   FormLabel,
   FormMessage
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Product } from '@/constants/mock-api';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import * as z from 'zod';
+} from '@/components/ui/form'; // Komponen untuk membangun form
+import { Input } from '@/components/ui/input'; // Input untuk teks
+import { Textarea } from '@/components/ui/textarea'; // Textarea untuk deskripsi panjang
+import { Product } from '@/constants/mock-api'; // Tipe data produk dari mock-api
+import { zodResolver } from '@hookform/resolvers/zod'; // Resolver untuk validasi form dengan Zod
+import { useForm } from 'react-hook-form'; // Hook untuk mengelola form
+import * as z from 'zod'; // Library untuk validasi skema data
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue
-} from '@/components/ui/select';
+} from '@/components/ui/select'; // Komponen select untuk memilih kategori produk
 
-const MAX_FILE_SIZE = 5000000;
+const MAX_FILE_SIZE = 1000000; // Batas ukuran file 1MB per gambar
 const ACCEPTED_IMAGE_TYPES = [
   'image/jpeg',
   'image/jpg',
   'image/png',
   'image/webp'
-];
+]; // Jenis file gambar yang diterima
 
+// Skema validasi untuk form menggunakan Zod
 const formSchema = z.object({
   image: z
-    .any()
-    .refine((files) => files?.length == 1, 'Image is required.')
+    .array(z.string().url())
+    .max(4, 'You can add up to 4 URLs.')
+    .optional(), // Validasi URL gambar
+  file: z
+    .array(z.any())
+    .refine((files) => files?.length <= 4, 'You can upload up to 4 images.')
     .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
-      `Max file size is 5MB.`
+      (files) => files?.every((file) => file.size <= MAX_FILE_SIZE),
+      `Max file size is 1MB per image.`
     )
     .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      (files) =>
+        files?.every((file) => ACCEPTED_IMAGE_TYPES.includes(file.type)),
       '.jpg, .jpeg, .png and .webp files are accepted.'
-    ),
+    ), // Validasi untuk file gambar yang diunggah
   name: z.string().min(2, {
-    message: 'Product name must be at least 2 characters.'
+    message: 'Product name must be at least 2 characters.' // Nama produk harus lebih dari 2 karakter
   }),
-  price: z.number(),
+  price: z.number(), // Validasi harga produk
   description: z.string().min(10, {
-    message: 'Description must be at least 10 characters.'
+    message: 'Description must be at least 10 characters.' // Deskripsi produk harus lebih dari 10 karakter
   })
 });
 
+// Fungsi utama untuk form produk
 export default function ProductForm({
   initialData,
   pageTitle
 }: {
-  initialData: Product | null;
-  pageTitle: string;
+  initialData: Product | null; // Data produk awal (jika ada)
+  pageTitle: string; // Judul halaman
 }) {
   const [categories, setCategories] = useState<string[]>([
     'Beauty Products',
     'Electronics'
-  ]); // Daftar kategori yang sudah ada
-  const [newCategory, setNewCategory] = useState<string>('');
+  ]); // State untuk kategori produk
+  const [newCategory, setNewCategory] = useState<string>(''); // State untuk kategori baru
+  const [imageType, setImageType] = useState<'upload' | 'url'>('upload'); // Untuk memilih metode input gambar
 
+  // Fungsi untuk menambah kategori baru
   const handleAddCategory = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value.trim();
 
@@ -80,62 +89,126 @@ export default function ProductForm({
       setCategories((prev) => [...prev, inputValue]);
       event.currentTarget.value = ''; // Reset input field
     } else if (inputValue && categories.includes(inputValue)) {
-      // Tampilkan peringatan jika kategori sudah ada
-      alert('Category already exists!');
+      alert('Category already exists!'); // Jika kategori sudah ada
     }
   };
 
+  // Fungsi untuk menghapus kategori
   const handleRemoveCategory = (category: string) => {
-    setCategories((prev) => prev.filter((cat) => cat !== category));
+    setCategories((prev) => prev.filter((cat) => cat !== category)); // Menghapus kategori yang dipilih
   };
 
+  // Nilai default untuk form
   const defaultValues = {
     name: initialData?.name || '',
     price: initialData?.price || 0,
-    description: initialData?.description || ''
+    description: initialData?.description || '',
+    image: initialData?.photo_url ? [initialData.photo_url] : [],
+    file: [] // Tambahkan nilai default untuk 'file'
   };
 
+  // Hook untuk mengelola form dengan validasi dari Zod
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    values: defaultValues
+    defaultValues
   });
 
+  // Fungsi untuk menangani pengiriman form
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log({ ...values, categories });
+    // Pengiriman data ke database (misalnya Supabase atau backend lainnya)
   }
 
   return (
-    <Card className="w-full mx-auto">
+    <Card className="mx-auto w-full">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-left">
+        <CardTitle className="text-left text-2xl font-bold">
           {pageTitle}
-        </CardTitle>
+        </CardTitle>{' '}
+        {/* Judul Halaman */}
       </CardHeader>
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name="image"
-              render={({ field }) => (
-                <div className="space-y-6">
-                  <FormItem className="w-full">
-                    <FormLabel>Images</FormLabel>
-                    <FormControl>
-                      <FileUploader
-                        value={field.value}
-                        onValueChange={field.onChange}
-                        maxFiles={4}
-                        maxSize={4 * 1024 * 1024}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                </div>
+            <div className="space-y-6">
+              {/* Form untuk memilih gambar produk */}
+              <FormItem className="w-full">
+                <FormLabel>Image</FormLabel>
+                <FormControl>
+                  <div className="space-x-4">
+                    <Button
+                      type="button"
+                      onClick={() => setImageType('upload')}
+                      className={`${
+                        imageType === 'upload'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700'
+                      } transition-colors duration-300 hover:bg-blue-500`}
+                    >
+                      Upload Image
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => setImageType('url')}
+                      className={`${
+                        imageType === 'url'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-200 text-gray-700'
+                      } transition-colors duration-300 hover:bg-blue-500`}
+                    >
+                      Image URL
+                    </Button>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+
+              {/* Menampilkan form upload file jika 'upload' dipilih */}
+              {imageType === 'upload' ? (
+                <FormField
+                  control={form.control}
+                  name="file"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Upload Images</FormLabel>
+                      <FormControl>
+                        <FileUploader
+                          value={field.value}
+                          onValueChange={field.onChange}
+                          maxFiles={4}
+                          maxSize={MAX_FILE_SIZE}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              ) : (
+                // Menampilkan input URL gambar jika 'url' dipilih
+                <FormField
+                  control={form.control}
+                  name="image"
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Image URLs</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter image URL"
+                          value={field.value?.join(', ') || ''}
+                          onChange={(e) =>
+                            field.onChange(e.target.value.split(', '))
+                          }
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               )}
-            />
+            </div>
 
             <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+              {/* Form untuk nama produk */}
               <FormField
                 control={form.control}
                 name="name"
@@ -149,6 +222,7 @@ export default function ProductForm({
                   </FormItem>
                 )}
               />
+              {/* Form untuk kategori produk */}
               <FormField
                 control={form.control}
                 name="categories"
@@ -157,17 +231,16 @@ export default function ProductForm({
                     <FormLabel>Categories</FormLabel>
                     <FormControl>
                       <div>
-                        {/* Menampilkan daftar kategori sebagai tag */}
-                        <div className="flex flex-wrap gap-2 mb-2">
+                        <div className="mb-2 flex flex-wrap gap-2">
                           {categories.map((category) => (
                             <span
                               key={category}
-                              className="inline-flex items-center px-3 py-1 text-blue-800 bg-blue-200 rounded-full"
+                              className="inline-flex items-center rounded-full bg-blue-200 px-3 py-1 text-blue-800"
                             >
                               {category}
                               <button
                                 type="button"
-                                onClick={() => handleRemoveCategory(category)} // Menghapus kategori
+                                onClick={() => handleRemoveCategory(category)}
                                 className="ml-2 text-red-600"
                               >
                                 &times;
@@ -176,7 +249,6 @@ export default function ProductForm({
                           ))}
                         </div>
 
-                        {/* Dropdown Select untuk memilih kategori yang sudah ada */}
                         <Select
                           onValueChange={(value) => setNewCategory(value)}
                         >
@@ -186,7 +258,6 @@ export default function ProductForm({
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {/* Input untuk menambah kategori baru */}
                             <Input
                               placeholder="Type and press Enter to add category"
                               onKeyDown={handleAddCategory}
@@ -204,6 +275,7 @@ export default function ProductForm({
                   </FormItem>
                 )}
               />
+              {/* Form untuk harga produk */}
               <FormField
                 control={form.control}
                 name="price"
@@ -223,6 +295,8 @@ export default function ProductForm({
                 )}
               />
             </div>
+
+            {/* Form untuk deskripsi produk */}
             <FormField
               control={form.control}
               name="description"
@@ -240,6 +314,7 @@ export default function ProductForm({
                 </FormItem>
               )}
             />
+
             <Button type="submit">Add Product</Button>
           </form>
         </Form>

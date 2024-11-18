@@ -1,4 +1,4 @@
-import { fakeProducts, Product } from '@/constants/mock-api';
+import { Product, supabaseProducts } from '@/constants/mock-api';
 import { notFound } from 'next/navigation';
 import ProductForm from './product-form';
 
@@ -13,7 +13,7 @@ export default async function ProductViewPage({
   let pageTitle = 'Create New Product';
 
   if (productId !== 'new') {
-    const data = await fakeProducts.getProductById(Number(productId));
+    const data = await supabaseProducts.getProductById(Number(productId));
     product = data.product as Product;
     if (!product) {
       notFound();
