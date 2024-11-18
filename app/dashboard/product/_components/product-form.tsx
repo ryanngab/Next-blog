@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'; // Komponen select untuk memilih kategori produk
+import supabase from '@/lib/supabaseClient'; // Import Supabase client
 
 const MAX_FILE_SIZE = 1000000; // Batas ukuran file 1MB per gambar
 const ACCEPTED_IMAGE_TYPES = [
@@ -58,7 +59,8 @@ const formSchema = z.object({
   price: z.number(), // Validasi harga produk
   description: z.string().min(10, {
     message: 'Description must be at least 10 characters.' // Deskripsi produk harus lebih dari 10 karakter
-  })
+  }),
+  category: z.array(z.string()).optional() // Tambahkan validasi untuk kategori
 });
 
 // Fungsi utama untuk form produk
@@ -69,7 +71,7 @@ export default function ProductForm({
   initialData: Product | null; // Data produk awal (jika ada)
   pageTitle: string; // Judul halaman
 }) {
-  const [categories, setCategories] = useState<string[]>([
+  const [category, setcategory] = useState<string[]>([
     'Beauty Products',
     'Electronics'
   ]); // State untuk kategori produk
@@ -80,23 +82,56 @@ export default function ProductForm({
   const handleAddCategory = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value.trim();
 
-    if (
-      event.key === 'Enter' &&
-      inputValue &&
-      !categories.includes(inputValue)
-    ) {
+    if (event.key === 'Enter' && inputValue && !category.includes(inputValue)) {
       event.preventDefault();
-      setCategories((prev) => [...prev, inputValue]);
+      setcategory((prev) => [...prev, inputValue]);
       event.currentTarget.value = ''; // Reset input field
-    } else if (inputValue && categories.includes(inputValue)) {
+    } else if (inputValue && category.includes(inputValue)) {
       alert('Category already exists!'); // Jika kategori sudah ada
     }
   };
 
   // Fungsi untuk menghapus kategori
   const handleRemoveCategory = (category: string) => {
-    setCategories((prev) => prev.filter((cat) => cat !== category)); // Menghapus kategori yang dipilih
+    setcategory((prev) => prev.filter((cat) => cat !== category)); // Menghapus kategori yang dipilih
   };
+
+  // Fungsi untuk menangani pengiriman form
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const { data, error } = initialData
+      ? await supabase
+          .from('products') // Nama tabel di Supabase
+          .update({
+            name: values.name,
+            description: values.description,
+            category: values.category ? values.category.join(', ') : '', // Memastikan category tidak undefined
+            price: values.price,
+            photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
+            updated_at: new Date().toISOString() // Tanggal diperbarui
+          })
+          .eq('id', initialData.id) // Mengupdate berdasarkan ID produk
+      : await supabase
+          .from('products') // Nama tabel di Supabase
+          .insert([
+            {
+              name: values.name,
+              description: values.description,
+              category: values.category ? values.category.join(', ') : '', // Memastikan category tidak undefined
+              price: values.price,
+              photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
+              created_at: new Date().toISOString(), // Tanggal dibuat
+              updated_at: new Date().toISOString() // Tanggal diperbarui
+            }
+          ]);
+
+    if (error) {
+      console.error('Error inserting/updating data:', error);
+      alert('Failed to save product.'); // Menampilkan pesan kesalahan
+    } else {
+      console.log('Product saved:', data);
+      alert('Product saved successfully!'); // Menampilkan pesan sukses
+    }
+  }
 
   // Nilai default untuk form
   const defaultValues = {
@@ -112,12 +147,6 @@ export default function ProductForm({
     resolver: zodResolver(formSchema),
     defaultValues
   });
-
-  // Fungsi untuk menangani pengiriman form
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log({ ...values, categories });
-    // Pengiriman data ke database (misalnya Supabase atau backend lainnya)
-  }
 
   return (
     <Card className="mx-auto w-full">
@@ -225,14 +254,14 @@ export default function ProductForm({
               {/* Form untuk kategori produk */}
               <FormField
                 control={form.control}
-                name="categories"
+                name="category"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Categories</FormLabel>
+                    <FormLabel>category</FormLabel>
                     <FormControl>
                       <div>
                         <div className="mb-2 flex flex-wrap gap-2">
-                          {categories.map((category) => (
+                          {category.map((category) => (
                             <span
                               key={category}
                               className="inline-flex items-center rounded-full bg-blue-200 px-3 py-1 text-blue-800"
@@ -254,7 +283,7 @@ export default function ProductForm({
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select categories" />
+                              <SelectValue placeholder="Select category" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
@@ -262,7 +291,7 @@ export default function ProductForm({
                               placeholder="Type and press Enter to add category"
                               onKeyDown={handleAddCategory}
                             />
-                            {categories.map((category) => (
+                            {category.map((category) => (
                               <SelectItem key={category} value={category}>
                                 {category}
                               </SelectItem>
@@ -288,6 +317,9 @@ export default function ProductForm({
                         step="0.01"
                         placeholder="Enter price"
                         {...field}
+                        onChange={(e) =>
+                          field.onChange(parseFloat(e.target.value) || 0)
+                        }
                       />
                     </FormControl>
                     <FormMessage />
