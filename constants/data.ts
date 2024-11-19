@@ -123,33 +123,6 @@ export type Product = {
 
 export const navItems: NavItem[] = [
   {
-    title: 'Landing',
-    url: '/',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: false
-  },
-  {
-    title: 'Blog',
-    url: '/blog',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: false
-  },
-  {
-    title: 'Category',
-    url: '/',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: false
-  },
-  {
     title: 'Dashboard',
     url: '/dashboard/overview',
     icon: 'dashboard',
@@ -179,13 +152,13 @@ export const navItems: NavItem[] = [
   {
     title: 'Account',
     url: '#',
-    icon: 'billing',
+    icon: 'user',
     isActive: true,
     items: [
       {
         title: 'Profile',
         url: '/dashboard/profile',
-        icon: 'userPen',
+        icon: 'user',
         shortcut: ['m', 'm'],
         requiresAuth: true // Ini juga hanya muncul saat login
       },
@@ -207,5 +180,77 @@ export const navItems: NavItem[] = [
     isActive: false,
     items: [],
     requiresAuth: true
+  },
+  {
+    title: 'Landing',
+    url: '/',
+    icon: 'landing',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Category',
+    url: '/category',
+    icon: 'category',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Blog',
+    url: '/blog',
+    icon: 'blog',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'About',
+    url: '/about',
+    icon: 'about',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Contact',
+    url: '/contact',
+    icon: 'contact',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Adsense',
+    url: '/adsense',
+    icon: 'adsense',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Sitemap',
+    url: '/sitemap',
+    icon: 'sitemap',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Download App',
+    url: '/download-app',
+    icon: 'downloadApp',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
   }
 ];

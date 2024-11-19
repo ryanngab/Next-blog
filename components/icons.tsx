@@ -30,7 +30,17 @@ import {
   UserCircle2Icon,
   UserPen,
   UserX2Icon,
-  X
+  X,
+  Bookmark,
+  Grid,
+  Home,
+  Info,
+  DollarSign,
+  ShoppingCart,
+  Map,
+  Download,
+  Phone,
+  Wrench
 } from 'lucide-react';
 
 export type Icon = LucideIcon;
@@ -82,5 +92,16 @@ export const Icons = {
     </svg>
   ),
   twitter: Twitter,
-  check: Check
+  check: Check,
+  landing: Home,
+  category: Grid,
+  bookmark: Bookmark,
+  blog: FileText,
+  about: Info,
+  adsense: DollarSign,
+  products: ShoppingCart,
+  sitemap: Map,
+  downloadApp: Download,
+  contact: Phone,
+  tools: Wrench
 };
