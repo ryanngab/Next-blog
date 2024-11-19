@@ -19,7 +19,9 @@ import { toast } from 'sonner';
 import * as z from 'zod';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'Enter a valid email address' })
+  email: z.string().email({ message: 'Enter a valid email address' }),
+  message: z.string().min(1, { message: 'Enter a valid message' }),
+  name: z.string().min(1, { message: 'Enter a valid name' })
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -29,7 +31,9 @@ export default function ContactForm() {
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, startTransition] = useTransition();
   const defaultValues = {
-    email: 'demo@gmail.com'
+    email: 'demo@gmail.com',
+    name: 'riyan',
+    message: 'hello'
   };
   const form = useForm<UserFormValue>({
     resolver: zodResolver(formSchema),
@@ -40,6 +44,8 @@ export default function ContactForm() {
     startTransition(() => {
       signIn('credentials', {
         email: data.email,
+        name: data.name,
+        message: data.message,
         callbackUrl: callbackUrl ?? '/dashboard'
       });
       toast.success('Signed In Successfully!');
