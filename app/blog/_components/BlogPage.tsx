@@ -115,19 +115,19 @@ const BlogPage: React.FC = () => {
           <SwipperBlog carouselData={swipperData} />
           {!loading ? (
             <>
-              <div className="grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => (
                   <CardBlog key={post.id} post={post} />
                 ))}
               </div>
-              <div className="flex justify-center mt-6">
+              <div className="mt-6 flex justify-center">
                 <Pagination>
                   <PaginationContent>
                     {/* Previous Button */}
                     <PaginationItem>
                       <PaginationPrevious
                         onClick={() => handlePageChange(currentPage - 1)}
-                        disabled={currentPage === 1}
+                        isActive={currentPage > 1}
                       />
                     </PaginationItem>
                     {/* Page Numbers */}
