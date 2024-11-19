@@ -165,10 +165,26 @@ export const supabaseProducts = {
 })();
 
 // Define the shape of User data
-
 type Gender = 'male' | 'female';
 
-export type User = {};
+export type User = {
+  id: number;
+  first_name: string;
+  last_name: string;
+  email: string;
+  phone: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  zipcode: string;
+  longitude: number;
+  latitude: number;
+  gender: Gender;
+  date_of_birth: string;
+  job: string;
+  profile_picture: string;
+};
 
 // Mock user data store
 export const fakeUsers = {
