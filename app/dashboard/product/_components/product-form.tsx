@@ -71,10 +71,9 @@ export default function ProductForm({
   initialData: Product | null; // Data produk awal (jika ada)
   pageTitle: string; // Judul halaman
 }) {
-  const [category, setcategory] = useState<string[]>([
-    'Beauty Products',
-    'Electronics'
-  ]); // State untuk kategori produk
+  const [category, setcategory] = useState<string[]>(
+    initialData?.category ? initialData.category.split(', ') : []
+  ); // State untuk kategori produk
   const [newCategory, setNewCategory] = useState<string>(''); // State untuk kategori baru
   const [imageType, setImageType] = useState<'upload' | 'url'>('upload'); // Untuk memilih metode input gambar
 
@@ -92,8 +91,8 @@ export default function ProductForm({
   };
 
   // Fungsi untuk menghapus kategori
-  const handleRemoveCategory = (category: string) => {
-    setcategory((prev) => prev.filter((cat) => cat !== category)); // Menghapus kategori yang dipilih
+  const handleRemoveCategory = (categoryToRemove: string) => {
+    setcategory((prev) => prev.filter((cat) => cat !== categoryToRemove)); // Menghapus kategori yang dipilih
   };
 
   // Fungsi untuk menangani pengiriman form
@@ -104,7 +103,7 @@ export default function ProductForm({
           .update({
             name: values.name,
             description: values.description,
-            category: values.category ? values.category.join(', ') : '', // Memastikan category tidak undefined
+            category: category.join(', '), // Menggunakan state category yang diperbarui
             price: values.price,
             photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
             updated_at: new Date().toISOString() // Tanggal diperbarui
@@ -116,7 +115,7 @@ export default function ProductForm({
             {
               name: values.name,
               description: values.description,
-              category: values.category ? values.category.join(', ') : '', // Memastikan category tidak undefined
+              category: category.join(', '), // Menggunakan state category yang diperbarui
               price: values.price,
               photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
               created_at: new Date().toISOString(), // Tanggal dibuat
@@ -139,7 +138,8 @@ export default function ProductForm({
     price: initialData?.price || 0,
     description: initialData?.description || '',
     image: initialData?.photo_url ? [initialData.photo_url] : [],
-    file: [] // Tambahkan nilai default untuk 'file'
+    file: [], // Tambahkan nilai default untuk 'file'
+    category: initialData?.category ? initialData.category.split(', ') : [] // Ambil kategori dari initialData
   };
 
   // Hook untuk mengelola form dengan validasi dari Zod
@@ -257,25 +257,29 @@ export default function ProductForm({
                 name="category"
                 render={() => (
                   <FormItem>
-                    <FormLabel>category</FormLabel>
+                    <FormLabel>Category</FormLabel>
                     <FormControl>
                       <div>
                         <div className="mb-2 flex flex-wrap gap-2">
-                          {category.map((category) => (
-                            <span
-                              key={category}
-                              className="inline-flex items-center rounded-full bg-blue-200 px-3 py-1 text-blue-800"
-                            >
-                              {category}
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveCategory(category)}
-                                className="ml-2 text-red-600"
+                          {category.map(
+                            (
+                              cat // Menggunakan state category
+                            ) => (
+                              <span
+                                key={cat}
+                                className="inline-flex items-center rounded-full bg-blue-200 px-3 py-1 text-blue-800"
                               >
-                                &times;
-                              </button>
-                            </span>
-                          ))}
+                                {cat}
+                                <button
+                                  type="button"
+                                  onClick={() => handleRemoveCategory(cat)} // Menghapus kategori
+                                  className="ml-2 text-red-600"
+                                >
+                                  &times;
+                                </button>
+                              </span>
+                            )
+                          )}
                         </div>
 
                         <Select
@@ -289,13 +293,17 @@ export default function ProductForm({
                           <SelectContent>
                             <Input
                               placeholder="Type and press Enter to add category"
-                              onKeyDown={handleAddCategory}
+                              onKeyDown={handleAddCategory} // Menambahkan kategori
                             />
-                            {category.map((category) => (
-                              <SelectItem key={category} value={category}>
-                                {category}
-                              </SelectItem>
-                            ))}
+                            {category.map(
+                              (
+                                cat // Menggunakan state category
+                              ) => (
+                                <SelectItem key={cat} value={cat}>
+                                  {cat}
+                                </SelectItem>
+                              )
+                            )}
                           </SelectContent>
                         </Select>
                       </div>

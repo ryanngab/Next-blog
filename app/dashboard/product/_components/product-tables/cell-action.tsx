@@ -1,4 +1,5 @@
 'use client';
+
 import { AlertModal } from '@/components/modal/alert-modal';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +13,12 @@ import { Product } from '@/constants/data';
 import { Edit, MoreHorizontal, Trash } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { createClient } from '@supabase/supabase-js';
+
+// Inisialisasi Supabase client
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || '';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 interface CellActionProps {
   data: Product;
@@ -22,7 +29,41 @@ export const CellAction: React.FC<CellActionProps> = ({ data }) => {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
-  const onConfirm = async () => {};
+  const onConfirm = async () => {
+    setLoading(true);
+    try {
+      // Hapus data dari database Supabase
+      const { error } = await supabase
+        .from('products') // Ganti 'products' dengan nama tabel Anda
+        .delete()
+        .eq('id', data.id);
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      // Ambil data terbaru dari database
+      const { data: updatedData, error: fetchError } = await supabase
+        .from('products')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(10); // Ambil 10 data terbaru, sesuaikan sesuai kebutuhan
+
+      if (fetchError) {
+        throw new Error(fetchError.message);
+      }
+
+      // Lakukan sesuatu dengan updatedData jika diperlukan
+
+      // Refresh data setelah penghapusan
+      router.refresh();
+    } catch (error) {
+      console.error('Error deleting product:', error);
+    } finally {
+      setLoading(false);
+      setOpen(false);
+    }
+  };
 
   return (
     <>

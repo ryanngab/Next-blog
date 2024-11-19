@@ -5,7 +5,7 @@ import { useQueryState } from 'nuqs';
 import { useCallback, useMemo } from 'react';
 
 export const CATEGORY_OPTIONS = [
-  { value: 'Electronics', label: 'Electronics' },
+  { value: 'Tools', label: 'Tools' },
   { value: 'Furniture', label: 'Furniture' },
   { value: 'Clothing', label: 'Clothing' },
   { value: 'Toys', label: 'Toys' },

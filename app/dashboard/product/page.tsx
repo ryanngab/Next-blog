@@ -12,19 +12,22 @@ import { Suspense } from 'react';
 import ProductListingPage from './_components/product-listing';
 import ProductTableAction from './_components/product-tables/product-table-action';
 
+// Metadata untuk halaman ini, termasuk judul
 export const metadata = {
   title: 'Dashboard: Products'
 };
 
+// Tipe untuk properti halaman, termasuk parameter pencarian
 type pageProps = {
   searchParams: SearchParams;
 };
 
+// Fungsi utama untuk halaman produk
 export default async function Page({ searchParams }: pageProps) {
-  // Allow nested RSCs to access the search params (in a type-safe way)
+  // Mengizinkan RSC bersarang untuk mengakses parameter pencarian (dalam cara yang aman tipe)
   searchParamsCache.parse(searchParams);
 
-  // This key is used for invoke suspense if any of the search params changed (used for filters).
+  // Kunci ini digunakan untuk memicu suspense jika ada perubahan pada parameter pencarian (digunakan untuk filter).
   const key = serialize({ ...searchParams });
 
   return (
