@@ -105,7 +105,7 @@ export default function ProductForm({
             description: values.description,
             category: category.join(', '), // Menggunakan state category yang diperbarui
             price: values.price,
-            photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
+            photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
             updated_at: new Date().toISOString() // Tanggal diperbarui
           })
           .eq('id', initialData.id) // Mengupdate berdasarkan ID produk
@@ -117,7 +117,7 @@ export default function ProductForm({
               description: values.description,
               category: category.join(', '), // Menggunakan state category yang diperbarui
               price: values.price,
-              photo_url: values.image[0] || '', // Menggunakan URL gambar pertama jika ada
+              photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
               created_at: new Date().toISOString(), // Tanggal dibuat
               updated_at: new Date().toISOString() // Tanggal diperbarui
             }
