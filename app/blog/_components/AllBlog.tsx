@@ -52,22 +52,22 @@ const BlogPage: React.FC = () => {
 
   return (
     <PageContainer scrollable>
-      <div className="container flex flex-col mx-auto lg:flex lg:gap-6">
+      <div className="container mx-auto flex flex-col lg:flex lg:gap-6">
         {!loading ? (
           <>
-            <div className="grid gap-6 mt-8 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
               {posts.map((post) => (
                 <CardBlog key={post.id} post={post} />
               ))}
             </div>
-            <div className="flex justify-center mt-6">
+            <div className="mt-6 flex justify-center">
               <Pagination>
                 <PaginationContent>
                   {/* Previous Button */}
                   <PaginationItem>
                     <PaginationPrevious
                       onClick={() => handlePageChange(currentPage - 1)}
-                      disabled={currentPage === 1}
+                      isActive={currentPage > 1}
                     />
                   </PaginationItem>
                   {/* Page Numbers */}
@@ -96,7 +96,7 @@ const BlogPage: React.FC = () => {
                   <PaginationItem>
                     <PaginationNext
                       onClick={() => handlePageChange(currentPage + 1)}
-                      disabled={currentPage === totalPages}
+                      isActive={currentPage < totalPages}
                     />
                   </PaginationItem>
                 </PaginationContent>
