@@ -156,7 +156,7 @@ const BlogPage: React.FC = () => {
                     <PaginationItem>
                       <PaginationNext
                         onClick={() => handlePageChange(currentPage + 1)}
-                        disabled={currentPage === totalPages}
+                        isActive={currentPage < totalPages}
                       />
                     </PaginationItem>
                   </PaginationContent>
