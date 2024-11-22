@@ -13,7 +13,8 @@ interface CardProductProps {
     description: string;
     price: number;
     category: string;
-    image_url: string;
+    photo_url: string;
+    created_at: string;
   };
 }
 
@@ -22,7 +23,7 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
     <div className="group relative cursor-pointer overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-shadow duration-300 hover:shadow-xl">
       <div className="relative">
         <img
-          src={product.image_url || 'https://via.placeholder.com/150'}
+          src={product.photo_url || 'https://via.placeholder.com/150'}
           alt={product.name}
           className="h-48 w-full object-cover"
           loading="lazy"
@@ -38,7 +39,9 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
       </div>
       <div className="p-6">
         <h3 className="text-2xl font-bold tracking-tight">{product.name}</h3>
-        <p className="mt-2 text-sm">${product.price.toFixed(2)}</p>
+        <p className="mt-2 text-sm">
+          ${product.price} / Rp.{(product.price * 15000).toLocaleString()}
+        </p>
         <p className="mb-4 mt-4 text-sm text-muted-foreground">
           {product.description}
         </p>
@@ -54,7 +57,7 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
           </div>
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4 text-gray-500" />
-            <span>Published Date</span>
+            <span>{new Date(product.created_at).toLocaleDateString()}</span>
           </div>
         </div>
       </div>
