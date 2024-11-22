@@ -150,6 +150,15 @@ export const navItems: NavItem[] = [
     requiresAuth: true
   },
   {
+    title: 'Adsense',
+    url: '/dashboard/adsense',
+    icon: 'adsense',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: true
+  },
+  {
     title: 'Account',
     url: '#',
     icon: 'user',
@@ -205,6 +214,15 @@ export const navItems: NavItem[] = [
     icon: 'blog',
     isActive: false,
     shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false
+  },
+  {
+    title: 'Products',
+    url: '/products',
+    icon: 'product',
+    shortcut: ['p', 'p'],
+    isActive: false,
     items: [],
     requiresAuth: false
   },

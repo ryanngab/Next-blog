@@ -1,6 +1,5 @@
 import KBar from '@/components/kbar';
 import AppSidebar from '@/components/layout/app-sidebar';
-import Footer from '@/components/layout/footer';
 import Header from '@/components/layout/header';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
@@ -28,7 +27,6 @@ export default function DashboardLayout({
           {/* page main content */}
           {children}
           {/* page main content ends */}
-          <Footer />
         </SidebarInset>
       </SidebarProvider>
     </KBar>

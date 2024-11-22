@@ -1,5 +1,5 @@
-import { Copy, Share2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Copy, MessageCircleMoreIcon } from 'lucide-react';
+import { Button, buttonVariants } from '@/components/ui/button';
 import {
   Dialog,
   DialogClose,
@@ -12,16 +12,15 @@ import {
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { cn } from '@/lib/utils';
 
-export function ShareModalWithIcon() {
+export function CommentModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant="ghost"
-          className="rounded-full bg-white p-2 shadow hover:bg-gray-100"
-        >
-          <Share2 className="h-5 w-5 text-gray-800" />
+        <Button className={cn(buttonVariants(), 'w-full text-xs md:text-sm')}>
+          Join Disqusion
+          <MessageCircleMoreIcon className="ms-3 h-5 w-5" />
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
@@ -49,7 +48,7 @@ export function ShareModalWithIcon() {
             className="rounded-full p-2"
           >
             <span className="sr-only">Copy</span>
-            <Copy className="h-4 w-4 text-gray-800" />
+            <Copy className="h-4 w-4 " />
           </Button>
         </div>
         <DialogFooter className="sm:justify-start">

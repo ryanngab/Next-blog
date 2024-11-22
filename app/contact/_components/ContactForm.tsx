@@ -11,6 +11,8 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { InstagramLogoIcon, TwitterLogoIcon } from '@radix-ui/react-icons';
+import { Instagram, TwitterIcon } from 'lucide-react';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
@@ -64,19 +66,19 @@ export default function ContactForm() {
               href="#"
               className="flex items-center justify-center rounded-md bg-green-600 px-4 py-2 text-white"
             >
-              <i className="fas fa-envelope mr-2"></i>
+              <InstagramLogoIcon className="" />
             </a>
             <a
               href="#"
               className="flex items-center justify-center rounded-md bg-orange-600 px-4 py-2 text-white"
             >
-              <i className="fab fa-instagram mr-2"></i>
+              <Instagram className="" />
             </a>
             <a
               href="#"
               className="flex items-center justify-center rounded-md bg-green-500 px-4 py-2 text-white"
             >
-              <i className="fab fa-whatsapp mr-2"></i>
+              <TwitterIcon className="" />
             </a>
           </div>
         </div>

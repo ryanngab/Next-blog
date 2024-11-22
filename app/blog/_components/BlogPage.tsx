@@ -13,6 +13,13 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
+import ButtonCategory from './ButtonCategory';
+import PinnedPost from './PinnedPost';
+
+// Metadata untuk halaman ini, termasuk judul
+export const metadata = {
+  title: 'CVCODERS: Blog'
+};
 
 const BlogPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -110,12 +117,15 @@ const BlogPage: React.FC = () => {
 
   return (
     <PageContainer scrollable>
-      <div className="container mx-auto lg:flex lg:gap-6">
+      <div className="mx-auto lg:flex lg:gap-6">
         <div className="lg:w-3/4">
           <SwipperBlog carouselData={swipperData} />
+          <PinnedPost />
           {!loading ? (
             <>
-              <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+              <h2 className="mb-2 mt-8 text-lg font-semibold">Blog Post</h2>
+              {/* <hr className='mb-2' /> */}
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {posts.map((post) => (
                   <CardBlog key={post.id} post={post} />
                 ))}
@@ -169,6 +179,7 @@ const BlogPage: React.FC = () => {
         </div>
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
           <PopularBlog posts={popularPosts} />
+          <ButtonCategory />
         </aside>
       </div>
     </PageContainer>

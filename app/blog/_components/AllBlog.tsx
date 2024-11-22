@@ -17,7 +17,7 @@ const BlogPage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
-  const pageSize = 8;
+  const pageSize = 10;
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -52,10 +52,10 @@ const BlogPage: React.FC = () => {
 
   return (
     <PageContainer scrollable>
-      <div className="container mx-auto flex flex-col lg:flex lg:gap-6">
+      <div className=" mx-auto flex flex-col lg:flex lg:gap-6">
         {!loading ? (
           <>
-            <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
               {posts.map((post) => (
                 <CardBlog key={post.id} post={post} />
               ))}
