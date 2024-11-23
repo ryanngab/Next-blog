@@ -4,9 +4,9 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { createClient } from '@supabase/supabase-js';
 import { CommentModal } from '@/components/modal/CommentModal';
-import TagsBlog from '@/app/blog/_components/TagsBlog';
 import { ShareModal } from '@/components/modal/ShareModal';
 import PageContainer from '@/components/layout/page-container';
+import TagsProducts from './TagsProducts';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -44,6 +44,11 @@ const ProductDetailPage = () => {
 
   if (!product) return <p>Product not found!</p>;
 
+  // Ubah kategori produk menjadi array (jika berupa string terpisah koma)
+  const categories = product.category
+    ? product.category.split(',').map((cat: string) => cat.trim())
+    : [];
+
   return (
     <PageContainer scrollable>
       <div className="container mx-auto px-4 lg:flex lg:gap-6">
@@ -54,15 +59,15 @@ const ProductDetailPage = () => {
               <span>{product.author}</span> |{' '}
               <span>{new Date(product.created_at).toLocaleDateString()}</span>
             </div>
-            <div className="">
+            <div className="flex">
               <ShareModal />
             </div>
           </div>
-          <div className="">
+          <div>
             <img
               src={product.photo_url || 'https://via.placeholder.com/150'}
               alt={product.name}
-              className=" rounded-lg object-cover"
+              className="rounded-lg object-cover"
               loading="lazy"
             />
           </div>
@@ -74,13 +79,12 @@ const ProductDetailPage = () => {
             dangerouslySetInnerHTML={{ __html: product.description }}
             className="prose"
           />
-
-          <TagsBlog />
+          <TagsProducts categories={categories} /> {/* Pass categories here */}
           <CommentModal />
         </div>
 
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
-          {/* <PopularBlog posts={popularPosts} /> */}
+          {/* Future components like PopularBlog */}
         </aside>
       </div>
     </PageContainer>
