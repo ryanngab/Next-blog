@@ -42,7 +42,7 @@ const PinnedPost: React.FC<PinnedPostProps> = ({ post }) => {
               </p>
               <div className="mt-auto flex justify-between gap-3">
                 <Link
-                  href=""
+                  href="sssss"
                   className={cn(buttonVariants(), ' text-xs md:text-sm')}
                 >
                   Buy Now
