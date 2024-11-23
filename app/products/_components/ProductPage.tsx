@@ -9,20 +9,21 @@ import supabaseClient from '@/lib/supabaseClient';
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
 
+// Perbarui antarmuka Product
 interface Product {
   id: number;
   name: string;
   description: string;
   price: number;
   category: string;
-  image_url: string;
+  photo_url: string; // Ganti dengan photo_url jika perlu
+  created_at: string; // Tambahkan properti created_at
 }
 
 const ITEMS_PER_PAGE = 6; // Jumlah item per halaman
