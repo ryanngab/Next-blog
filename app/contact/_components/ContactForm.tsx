@@ -17,11 +17,14 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
 import * as z from 'zod';
+import { useState } from 'react';
+import emailjs from 'emailjs-com';
 
 const formSchema = z.object({
   email: z.string().email({ message: 'Enter a valid email address' }),
   message: z.string().min(1, { message: 'Enter a valid message' }),
-  name: z.string().min(1, { message: 'Enter a valid name' })
+  name: z.string().min(1, { message: 'Enter a valid name' }),
+  subject: z.string().min(1, { message: 'Enter a valid subject' })
 });
 
 type UserFormValue = z.infer<typeof formSchema>;
@@ -30,27 +33,44 @@ export default function ContactForm() {
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get('callbackUrl');
   const [loading, startTransition] = useTransition();
-  const defaultValues = {
-    email: 'demo@gmail.com',
-    name: 'riyan',
-    message: 'hello'
-  };
+  const [sendMethod, setSendMethod] = useState<'email' | 'whatsapp'>(
+    'whatsapp'
+  );
   const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
-    defaultValues
+    resolver: zodResolver(formSchema)
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    const message = `Name: ${data.name}\nEmail: ${data.email}\nMessage: ${data.message}`;
+    const message = `Name: ${data.name}\nEmail: ${data.email}\nSubject: ${data.subject}\nMessage: ${data.message}`;
     const phoneNumber = '03137991102';
     const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
       message
     )}`;
 
-    // Membuka WhatsApp dengan pesan
-    window.open(whatsappUrl, '_blank');
-
-    toast.success('Pesan berhasil dikirim!');
+    if (sendMethod === 'whatsapp') {
+      // Membuka WhatsApp dengan pesan
+      window.open(whatsappUrl, '_blank');
+      toast.success('Pesan berhasil dikirim melalui WhatsApp!');
+    } else {
+      // Mengirim email menggunakan EmailJS
+      try {
+        await emailjs.send(
+          process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
+          process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
+          {
+            from_name: data.name,
+            from_email: data.email,
+            subject: data.subject,
+            message: data.message
+          },
+          process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
+        );
+        toast.success('Pesan berhasil dikirim melalui Email!');
+      } catch (error) {
+        console.error('Error sending email:', error);
+        toast.error('Gagal mengirim pesan melalui Email.');
+      }
+    }
   };
 
   return (
@@ -186,7 +206,7 @@ export default function ContactForm() {
                     <FormControl>
                       <Input
                         type="text"
-                        placeholder="Enter your name..."
+                        placeholder="Masukkan nama Anda..."
                         disabled={loading}
                         {...field}
                       />
@@ -195,24 +215,46 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="email"
-                        placeholder="Enter your email..."
-                        disabled={loading}
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              {sendMethod === 'email' && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="email"
+                            placeholder="Masukkan email Anda..."
+                            disabled={loading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="subject"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Subject</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="text"
+                            placeholder="Masukkan subjek Anda..."
+                            disabled={loading}
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </>
+              )}
               <FormField
                 control={form.control}
                 name="message"
@@ -221,7 +263,7 @@ export default function ContactForm() {
                     <FormLabel>Message</FormLabel>
                     <FormControl>
                       <Textarea
-                        placeholder="Enter product description"
+                        placeholder="Masukkan pesan Anda..."
                         className="resize-none"
                         {...field}
                       />
@@ -230,12 +272,32 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
+              <div className="flex items-center space-x-4">
+                <label>
+                  <input
+                    type="radio"
+                    value="whatsapp"
+                    checked={sendMethod === 'whatsapp'}
+                    onChange={() => setSendMethod('whatsapp')}
+                  />
+                  Kirim lewat WhatsApp
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    value="email"
+                    checked={sendMethod === 'email'}
+                    onChange={() => setSendMethod('email')}
+                  />
+                  Kirim lewat Email
+                </label>
+              </div>
               <Button
                 disabled={loading}
                 className="ml-auto mt-2 w-full"
                 type="submit"
               >
-                Enter
+                Kirim
               </Button>
             </form>
           </Form>
