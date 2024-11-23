@@ -230,14 +230,14 @@ export default function ContactForm() {
                   </FormItem>
                 )}
               />
+              <Button
+                disabled={loading}
+                className="ml-auto mt-2 w-full"
+                type="submit"
+              >
+                Enter
+              </Button>
             </form>
-            <Button
-              disabled={loading}
-              className="ml-auto mt-2 w-full"
-              type="submit"
-            >
-              Enter
-            </Button>
           </Form>
         </div>
       </div>
