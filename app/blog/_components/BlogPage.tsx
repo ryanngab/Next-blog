@@ -16,19 +16,39 @@ import {
 import ButtonCategory from './ButtonCategory';
 import PinnedPost from './PinnedPost';
 
-// Metadata untuk halaman ini, termasuk judul
 export const metadata = {
   title: 'CVCODERS: Blog'
 };
 
 const BlogPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
+  // const [popularPosts, setPopularPosts] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(1);
   const [loading, setLoading] = useState<boolean>(true);
   const pageSize = 6;
   const [swipperData, setSwipperData] = useState<any[]>([]);
   const [pinnedPost, setPinnedPost] = useState<any | null>(null);
+
+  // // Fetch Popular Blog
+  // useEffect(() => {
+  //   const fetchPopularPosts = async () => {
+  //     try {
+  //       const response = await fetch(`/api/products/popular`); // API sekarang hanya mengembalikan 5 data terbaru
+  //       const data = await response.json();
+
+  //       if (!data.error) {
+  //         setPopularPosts(data); // Data langsung diset tanpa filter ulang
+  //       } else {
+  //         console.error(data.error);
+  //       }
+  //     } catch (error) {
+  //       console.error('Error fetching popular posts:', error);
+  //     }
+  //   };
+
+  //   fetchPopularPosts();
+  // }, []);
 
   // Fetch Pinned Post & Swipper Data
   useEffect(() => {
@@ -40,13 +60,11 @@ const BlogPage: React.FC = () => {
         if (data.error) {
           console.error(data.error);
         } else {
-          // Ambil postingan pertama sebagai Pinned Post jika pinned true
           const pinnedPosts = data.filter((item: any) => item.pinned);
-          setPinnedPost(pinnedPosts[0] || null); // Set pinnedPost jika ada
+          setPinnedPost(pinnedPosts[0] || null);
 
-          // Sisanya untuk Swipper Blog dengan swipper true
           const swipperPosts = data.filter((item: any) => item.swipper);
-          setSwipperData(swipperPosts); // Set swipperData
+          setSwipperData(swipperPosts);
         }
       } catch (error) {
         console.error('Error fetching swipper data:', error);
@@ -56,6 +74,7 @@ const BlogPage: React.FC = () => {
     fetchSwipperData();
   }, []);
 
+  // Fetch Blog Posts
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
@@ -104,14 +123,12 @@ const BlogPage: React.FC = () => {
               <div className="mt-6 flex justify-center">
                 <Pagination>
                   <PaginationContent>
-                    {/* Previous Button */}
                     <PaginationItem>
                       <PaginationPrevious
                         onClick={() => handlePageChange(currentPage - 1)}
                         isActive={currentPage > 1}
                       />
                     </PaginationItem>
-                    {/* Page Numbers */}
                     {Array.from({ length: totalPages }, (_, i) => (
                       <PaginationItem key={i}>
                         <PaginationLink
@@ -127,13 +144,11 @@ const BlogPage: React.FC = () => {
                         </PaginationLink>
                       </PaginationItem>
                     ))}
-                    {/* Ellipsis for skipped pages */}
                     {totalPages > 5 && (
                       <PaginationItem>
                         <PaginationEllipsis />
                       </PaginationItem>
                     )}
-                    {/* Next Button */}
                     <PaginationItem>
                       <PaginationNext
                         onClick={() => handlePageChange(currentPage + 1)}
@@ -149,6 +164,7 @@ const BlogPage: React.FC = () => {
           )}
         </div>
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
+          <PopularBlog />
           <ButtonCategory />
         </aside>
       </div>

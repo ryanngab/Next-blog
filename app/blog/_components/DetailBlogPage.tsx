@@ -28,26 +28,6 @@ const BlogDetailPage = () => {
   }, [id]);
 
   if (!post) return <div>Loading...</div>;
-  const popularPosts = [
-    {
-      id: 1,
-      image: 'images.unsplash.com/photo-1515378791036-0648a3ef77b2',
-      title: 'Top Programming Languages 2024',
-      excerpt: 'Discover the most in-demand programming languages this year.'
-    },
-    {
-      id: 2,
-      image: 'images.unsplash.com/photo-1531403009284-440f080d1e12',
-      title: 'Machine Learning Basics',
-      excerpt: 'Get started with the fundamentals of machine learning.'
-    },
-    {
-      id: 3,
-      image: 'images.unsplash.com/photo-1504639725590-34d0984388bd',
-      title: 'Cybersecurity Essentials',
-      excerpt: 'Learn the basics of protecting your digital assets.'
-    }
-  ];
   return (
     <PageContainer scrollable>
       <div className="container mx-auto px-4 lg:flex lg:gap-6">
@@ -71,7 +51,7 @@ const BlogDetailPage = () => {
         </div>
 
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
-          <PopularBlog posts={popularPosts} />
+          <PopularBlog />
         </aside>
       </div>
     </PageContainer>
