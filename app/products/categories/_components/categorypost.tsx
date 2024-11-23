@@ -134,7 +134,7 @@ const CategoryPost = () => {
               )}
             </>
           ) : (
-            <p>No products found for category "{category}".</p>
+            <p>No products found for category &quot;{category} &quot;</p>
           )}
         </div>
       </div>
