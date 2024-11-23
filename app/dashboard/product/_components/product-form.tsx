@@ -60,7 +60,9 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: 'Description must be at least 10 characters.' // Deskripsi produk harus lebih dari 10 karakter
   }),
-  category: z.array(z.string()).optional() // Tambahkan validasi untuk kategori
+  category: z.array(z.string()).optional(), // Tambahkan validasi untuk kategori
+  pinned: z.boolean().optional(), // Tambahkan validasi untuk kolom pinned
+  swiper: z.boolean().optional() // Tambahkan validasi untuk kolom swiper
 });
 
 // Fungsi utama untuk form produk
@@ -106,6 +108,8 @@ export default function ProductForm({
             category: category.join(', '), // Menggunakan state category yang diperbarui
             price: values.price,
             photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
+            pinned: values.pinned,
+            swiper: values.swiper,
             updated_at: new Date().toISOString() // Tanggal diperbarui
           })
           .eq('id', initialData.id) // Mengupdate berdasarkan ID produk
@@ -118,6 +122,8 @@ export default function ProductForm({
               category: category.join(', '), // Menggunakan state category yang diperbarui
               price: values.price,
               photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
+              pinned: values.pinned,
+              swiper: values.swiper,
               created_at: new Date().toISOString(), // Tanggal dibuat
               updated_at: new Date().toISOString() // Tanggal diperbarui
             }
@@ -139,7 +145,9 @@ export default function ProductForm({
     description: initialData?.description || '',
     image: initialData?.photo_url ? [initialData.photo_url] : [],
     file: [], // Tambahkan nilai default untuk 'file'
-    category: initialData?.category ? initialData.category.split(', ') : [] // Ambil kategori dari initialData
+    category: initialData?.category ? initialData.category.split(', ') : [], // Ambil kategori dari initialData
+    pinned: initialData?.pinned || false, // Tambahkan nilai default untuk pinned
+    swiper: initialData?.swiper || false // Tambahkan nilai default untuk swiper
   };
 
   // Hook untuk mengelola form dengan validasi dari Zod
@@ -312,6 +320,8 @@ export default function ProductForm({
                   </FormItem>
                 )}
               />
+            </div>
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
               {/* Form untuk harga produk */}
               <FormField
                 control={form.control}
@@ -329,6 +339,76 @@ export default function ProductForm({
                           field.onChange(parseFloat(e.target.value) || 0)
                         }
                       />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Form untuk pinned sebagai switcher */}
+              <FormField
+                control={form.control}
+                name="pinned"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Pinned</FormLabel>
+                    <FormControl>
+                      <label className="flex cursor-pointer items-center">
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            className="hidden"
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
+                          />
+                          <div className="block h-8 w-14 rounded-full bg-gray-300"></div>
+                          <div
+                            className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white transition-transform ${
+                              field.value
+                                ? 'translate-x-full transform bg-blue-500'
+                                : ''
+                            }`}
+                          ></div>
+                        </div>
+                        <span className="ml-2">
+                          {field.value ? 'True' : 'False'}
+                        </span>
+                      </label>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              {/* Form untuk swiper sebagai switcher */}
+              <FormField
+                control={form.control}
+                name="swiper"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Swiper</FormLabel>
+                    <FormControl>
+                      <label className="flex cursor-pointer items-center">
+                        <div className="relative">
+                          <input
+                            type="checkbox"
+                            className="hidden"
+                            checked={field.value}
+                            onChange={(e) => field.onChange(e.target.checked)}
+                          />
+                          <div className="block h-8 w-14 rounded-full bg-gray-300"></div>
+                          <div
+                            className={`absolute left-1 top-1 h-6 w-6 rounded-full bg-white transition-transform ${
+                              field.value
+                                ? 'translate-x-full transform bg-blue-500'
+                                : ''
+                            }`}
+                          ></div>
+                        </div>
+                        <span className="ml-2">
+                          {field.value ? 'True' : 'False'}
+                        </span>
+                      </label>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

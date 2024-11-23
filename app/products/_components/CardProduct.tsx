@@ -4,6 +4,7 @@ import React from 'react';
 import { Bookmark, Calendar, ShoppingCartIcon } from 'lucide-react';
 import Link from 'next/link';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import { buttonVariants } from '@/components/ui/button';
 
 interface CardProductProps {
@@ -19,8 +20,18 @@ interface CardProductProps {
 }
 
 const CardProduct: React.FC<CardProductProps> = ({ product }) => {
+  const router = useRouter();
   return (
-    <div className="group relative cursor-pointer overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-shadow duration-300 hover:shadow-xl">
+    <div
+      onClick={() =>
+        router.push(
+          `/products/${product.id}/${encodeURIComponent(
+            product.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '-')
+          )}`
+        )
+      }
+      className="group relative cursor-pointer overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-shadow duration-300 hover:shadow-xl"
+    >
       <div className="relative">
         <img
           src={product.photo_url || 'https://via.placeholder.com/150'}

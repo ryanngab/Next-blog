@@ -5,9 +5,7 @@ import { useParams } from 'next/navigation';
 import { CommentModal } from '@/components/modal/CommentModal';
 import './read.css';
 import TagsBlog from './TagsBlog';
-import ShareBlog from './ShareBlog';
 import PopularBlog from './PopularBlog';
-import { ShareModalWithIcon } from '@/components/modal/ShareModalWithIcon';
 import { ShareModal } from '@/components/modal/ShareModal';
 
 const BlogDetailPage = () => {

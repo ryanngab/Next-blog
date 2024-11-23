@@ -12,6 +12,8 @@ export type Product = {
   description: string;
   category: string;
   price: number;
+  pinned: boolean;
+  swiper: boolean;
   photo_url: string;
   created_at: string;
   updated_at: string;
