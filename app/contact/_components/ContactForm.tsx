@@ -41,15 +41,16 @@ export default function ContactForm() {
   });
 
   const onSubmit = async (data: UserFormValue) => {
-    startTransition(() => {
-      signIn('credentials', {
-        email: data.email,
-        name: data.name,
-        message: data.message,
-        callbackUrl: callbackUrl ?? '/dashboard'
-      });
-      toast.success('Signed In Successfully!');
-    });
+    const message = `Name: ${data.name}\nEmail: ${data.email}\nMessage: ${data.message}`;
+    const phoneNumber = '03137991102';
+    const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+
+    // Membuka WhatsApp dengan pesan
+    window.open(whatsappUrl, '_blank');
+
+    toast.success('Pesan berhasil dikirim!');
   };
 
   return (
