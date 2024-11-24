@@ -1,4 +1,5 @@
 'use client';
+
 import { useEffect, useState } from 'react';
 import PageContainer from '@/components/layout/page-container';
 import { useParams } from 'next/navigation';
@@ -37,7 +38,7 @@ const BlogDetailPage = () => {
             <div className="mb-4 text-sm text-muted-foreground">
               <span>{post.author}</span> | <span>{post.date}</span>
             </div>
-            <div className="">
+            <div className="flex">
               <ShareModal />
             </div>
           </div>
@@ -45,9 +46,15 @@ const BlogDetailPage = () => {
             dangerouslySetInnerHTML={{ __html: post.content }}
             className="prose"
           />
-
           <TagsBlog />
-          <CommentModal />
+          <CommentModal
+            // Ganti dengan shortname Disqus Anda
+            disqusConfig={{
+              url: `http://localhost:3000/blog/${post.id}`,
+              identifier: post.id,
+              title: post.title
+            }}
+          />
         </div>
 
         <aside className="mt-8 lg:mt-0 lg:w-1/4">

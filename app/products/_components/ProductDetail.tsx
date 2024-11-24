@@ -7,6 +7,9 @@ import { CommentModal } from '@/components/modal/CommentModal';
 import { ShareModal } from '@/components/modal/ShareModal';
 import PageContainer from '@/components/layout/page-container';
 import TagsProducts from './TagsProducts';
+import PopularBlog from '@/app/blog/_components/PopularBlog';
+import SubFooter from '@/components/SubFooter';
+import { Tags } from 'lucide-react';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -80,11 +83,20 @@ const ProductDetailPage = () => {
             className="prose"
           />
           <TagsProducts categories={categories} /> {/* Pass categories here */}
-          <CommentModal />
+          <CommentModal
+            disqusConfig={{
+              url: `http://localhost:3000/products/${product.id}`,
+              identifier: product.id,
+              title: product.title
+            }}
+          />
         </div>
 
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
           {/* Future components like PopularBlog */}
+          <PopularBlog />
+          <TagsProducts categories={categories} />
+          <SubFooter />
         </aside>
       </div>
     </PageContainer>

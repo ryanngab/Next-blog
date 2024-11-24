@@ -9,7 +9,7 @@ interface TagsProductsProps {
 
 const TagsProducts: React.FC<TagsProductsProps> = ({ categories }) => {
   return (
-    <div className="mb-3 flex flex-wrap gap-2">
+    <div className="mb-3 mt-3 flex flex-wrap gap-2">
       <p className="font-bold">Tags</p>
       <div className="flex flex-wrap gap-3">
         {categories.map((category, index) => (

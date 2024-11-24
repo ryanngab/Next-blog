@@ -149,15 +149,15 @@ export const navItems: NavItem[] = [
     items: [],
     requiresAuth: true
   },
-  {
-    title: 'Adsense',
-    url: '/dashboard/adsense',
-    icon: 'adsense',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: true
-  },
+  // {
+  //   title: 'Adsense',
+  //   url: '/dashboard/adsense',
+  //   icon: 'adsense',
+  //   isActive: false,
+  //   shortcut: ['d', 'd'],
+  //   items: [],
+  //   requiresAuth: true
+  // },
   {
     title: 'Account',
     url: '#',
@@ -244,15 +244,15 @@ export const navItems: NavItem[] = [
     items: [],
     requiresAuth: false
   },
-  {
-    title: 'Adsense',
-    url: '/adsense',
-    icon: 'adsense',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: false
-  },
+  // {
+  //   title: 'Adsense',
+  //   url: '/adsense',
+  //   icon: 'adsense',
+  //   isActive: false,
+  //   shortcut: ['d', 'd'],
+  //   items: [],
+  //   requiresAuth: false
+  // },
   {
     title: 'Sitemap',
     url: '/sitemap',

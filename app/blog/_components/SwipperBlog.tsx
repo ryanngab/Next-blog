@@ -19,6 +19,7 @@ interface SwiperBlogProps {
 
 const SwipperBlog: React.FC<SwiperBlogProps> = ({ carouselData }) => {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   const nextSlide = () =>
     setCurrentSlide((prev) => (prev + 1) % carouselData.length);
@@ -41,11 +42,17 @@ const SwipperBlog: React.FC<SwiperBlogProps> = ({ carouselData }) => {
         {carouselData.map((slide) => (
           <div key={slide.id} className="w-full flex-shrink-0">
             <div className="relative">
+              {loading && (
+                <div className="h-[400px] w-full animate-pulse bg-gray-300" />
+              )}
               <img
                 src={`${slide.photo_url}`}
                 alt={slide.name}
-                className="h-[400px] w-full object-cover"
+                className={`h-[400px] w-full object-cover ${
+                  loading ? 'hidden' : 'block'
+                }`}
                 loading="lazy"
+                onLoad={() => setLoading(false)}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
                 <h2 className="mb-2 text-2xl font-bold text-white">
