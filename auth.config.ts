@@ -1,6 +1,7 @@
 import { NextAuthConfig } from 'next-auth'; // Mengimpor tipe NextAuthConfig dari next-auth
 import CredentialProvider from 'next-auth/providers/credentials'; // Mengimpor penyedia otentikasi berbasis kredensial
 import GithubProvider from 'next-auth/providers/github'; // Mengimpor penyedia otentikasi menggunakan GitHub
+import supabase from '@/lib/supabaseClient'; // Mengimpor klien Supabase
 
 // Konfigurasi otentikasi
 const authConfig = {
@@ -22,21 +23,30 @@ const authConfig = {
       },
       // Fungsi untuk mengotorisasi pengguna
       async authorize(credentials, req) {
-        // Membuat objek pengguna berdasarkan kredensial yang diberikan
-        const user = {
-          id: '1', // ID pengguna (dapat disesuaikan dengan ID yang sebenarnya)
-          name: 'John', // Nama pengguna (dapat disesuaikan)
-          email: credentials?.email as string // Mengambil email dari kredensial
-        };
-        if (user) {
-          // Jika pengguna berhasil diotorisasi, objek pengguna akan dikembalikan
-          return user;
-        } else {
-          // Jika tidak, mengembalikan null akan menampilkan pesan kesalahan
-          return null;
+        // Ambil pengguna dari Supabase berdasarkan email
+        const { data: user, error } = await supabase
+          .from('users')
+          .select('*')
+          .eq('email', credentials?.email)
+          .single();
 
-          // Anda juga dapat menolak callback ini dengan Error sehingga pengguna akan diarahkan ke halaman kesalahan dengan pesan kesalahan sebagai parameter kueri
+        if (error || !user) {
+          // Jika terjadi kesalahan atau pengguna tidak ditemukan
+          return null;
         }
+
+        // Verifikasi password (pastikan Anda menggunakan metode hashing yang sesuai)
+        if (user.password !== credentials?.password) {
+          // Jika password tidak cocok
+          return null;
+        }
+
+        // Jika pengguna berhasil diotorisasi, objek pengguna akan dikembalikan
+        return {
+          id: user.id, // ID pengguna dari database
+          name: user.name, // Nama pengguna dari database
+          email: user.email // Email pengguna dari database
+        };
       }
     })
   ],

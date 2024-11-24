@@ -1,4 +1,5 @@
 'use client';
+
 import { Button } from '@/components/ui/button';
 import {
   Form,
@@ -10,15 +11,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { signIn } from 'next-auth/react';
-import { useSearchParams } from 'next/navigation';
-import { useTransition } from 'react';
+import { useTransition, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'sonner';
+import supabase from '@/lib/supabaseClient';
+import bcrypt from 'bcryptjs';
 import * as z from 'zod';
 import GithubSignInButton from './github-auth-button';
-import { useState, useEffect } from 'react';
-import emailjs from 'emailjs-com';
 
 const formSchema = z
   .object({
@@ -38,20 +37,18 @@ const formSchema = z
 type UserFormValue = z.infer<typeof formSchema>;
 
 export default function UserAuthForm() {
-  const searchParams = useSearchParams();
-  const callbackUrl = searchParams.get('callbackUrl');
   const [loading, startTransition] = useTransition();
-  const defaultValues = {
-    email: 'demo@gmail.com',
-    password: '',
-    confirmPassword: ''
-  };
-  const form = useForm<UserFormValue>({
-    resolver: zodResolver(formSchema),
-    defaultValues
-  });
   const [showPassword, setShowPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState('');
+
+  const form = useForm<UserFormValue>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      confirmPassword: ''
+    }
+  });
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -76,36 +73,84 @@ export default function UserAuthForm() {
     return () => subscription.unsubscribe();
   }, [form]);
 
+  const hashPassword = async (password: string): Promise<string> => {
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
+  };
+
+  const extractNameFromEmail = (email: string): string => {
+    const namePart = email.split('@')[0];
+    return namePart
+      .split('.')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(' ');
+  };
+
+  const resendVerificationEmail = async (email: string) => {
+    const { error } = await supabase.auth.resend({ email });
+    if (error) {
+      toast.error('Failed to resend verification email. Please try again.');
+    } else {
+      toast.success('Verification email resent. Please check your inbox.');
+    }
+  };
+
   const onSubmit = async (data: UserFormValue) => {
-    const confirmationCode = Math.floor(
-      100000 + Math.random() * 900000
-    ).toString();
+    startTransition(async () => {
+      // Cek apakah email sudah terdaftar
+      const { data: existingUser, error: fetchError } = await supabase
+        .from('users')
+        .select('email')
+        .eq('email', data.email)
+        .single();
 
-    emailjs
-      .send(
-        process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!,
-        process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!,
-        {
-          to_email: data.email,
-          confirmation_code: confirmationCode
-        },
-        process.env.NEXT_PUBLIC_EMAILJS_USER_ID!
-      )
-      .then((response) => {
-        console.log('Email sent successfully:', response.status, response.text);
-        toast.success('Confirmation code sent to your email!');
-      })
-      .catch((error) => {
-        console.error('Failed to send email:', error);
-        toast.error('Failed to send confirmation code.');
-      });
+      if (fetchError && fetchError.code !== 'PGRST116') {
+        toast.error('Failed to check email. Please try again later.');
+        return;
+      }
 
-    startTransition(() => {
-      signIn('credentials', {
+      if (existingUser) {
+        toast.error('Email already registered. Please log in.');
+        return;
+      }
+
+      // Autentikasi user ke Supabase Auth
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
-        callbackUrl: callbackUrl ?? '/dashboard'
+        password: data.password
       });
-      toast.success('Signed In Successfully!');
+
+      if (authError) {
+        toast.error('Authentication failed. Please try again.');
+        return;
+      }
+
+      // Jika email belum diverifikasi
+      if (authData?.user?.confirmed_at === null) {
+        toast.success(
+          'Registration successful! Please verify your email before logging in.'
+        );
+        return;
+      }
+
+      // Simpan data user ke tabel
+      const hashedPassword = await hashPassword(data.password);
+      const name = extractNameFromEmail(data.email);
+
+      const { error: insertError } = await supabase.from('users').insert({
+        email: data.email,
+        password: hashedPassword,
+        name,
+        is_admin: false
+      });
+
+      if (insertError) {
+        toast.error('Failed to register. Please try again later.');
+        return;
+      }
+
+      toast.success('Registration complete. Welcome!');
+      window.location.href = '/';
     });
   };
 
