@@ -1,60 +1,43 @@
-import { NextAuthConfig } from 'next-auth'; // Mengimpor tipe NextAuthConfig dari next-auth
-import CredentialProvider from 'next-auth/providers/credentials'; // Mengimpor penyedia otentikasi berbasis kredensial
-import GithubProvider from 'next-auth/providers/github'; // Mengimpor penyedia otentikasi menggunakan GitHub
-import supabase from '@/lib/supabaseClient'; // Mengimpor klien Supabase
+import { NextAuthConfig } from 'next-auth';
+import CredentialProvider from 'next-auth/providers/credentials';
+import GithubProvider from 'next-auth/providers/github';
 
-// Konfigurasi otentikasi
 const authConfig = {
   providers: [
-    // Konfigurasi untuk penyedia GitHub
     GithubProvider({
-      clientId: process.env.GITHUB_ID ?? '', // Mengambil clientId dari variabel lingkungan
-      clientSecret: process.env.GITHUB_SECRET ?? '' // Mengambil clientSecret dari variabel lingkungan
+      clientId: process.env.GITHUB_ID ?? '',
+      clientSecret: process.env.GITHUB_SECRET ?? ''
     }),
-    // Konfigurasi untuk penyedia kredensial
     CredentialProvider({
       credentials: {
         email: {
-          type: 'email' // Mendefinisikan field email sebagai tipe email
+          type: 'email'
         },
         password: {
-          type: 'password' // Mendefinisikan field password sebagai tipe password
+          type: 'password'
         }
       },
-      // Fungsi untuk mengotorisasi pengguna
       async authorize(credentials, req) {
-        // Ambil pengguna dari Supabase berdasarkan email
-        const { data: user, error } = await supabase
-          .from('users')
-          .select('*')
-          .eq('email', credentials?.email)
-          .single();
-
-        if (error || !user) {
-          // Jika terjadi kesalahan atau pengguna tidak ditemukan
-          return null;
-        }
-
-        // Verifikasi password (pastikan Anda menggunakan metode hashing yang sesuai)
-        if (user.password !== credentials?.password) {
-          // Jika password tidak cocok
-          return null;
-        }
-
-        // Jika pengguna berhasil diotorisasi, objek pengguna akan dikembalikan
-        return {
-          id: user.id, // ID pengguna dari database
-          name: user.name, // Nama pengguna dari database
-          email: user.email // Email pengguna dari database
+        const user = {
+          id: '1',
+          name: 'John',
+          email: credentials?.email as string
         };
+        if (user) {
+          // Any object returned will be saved in `user` property of the JWT
+          return user;
+        } else {
+          // If you return null then an error will be displayed advising the user to check their details.
+          return null;
+
+          // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
+        }
       }
     })
   ],
-  // Menentukan halaman kustom untuk proses masuk
   pages: {
-    signIn: '/' // Halaman yang digunakan untuk proses masuk
+    signIn: '/' //sigin page
   }
-} satisfies NextAuthConfig; // Memastikan bahwa objek ini sesuai dengan tipe NextAuthConfig
+} satisfies NextAuthConfig;
 
-// Mengekspor konfigurasi otentikasi agar dapat digunakan di bagian lain aplikasi
 export default authConfig;
