@@ -87,13 +87,13 @@ const CardBlog: React.FC<CardBlogProps> = ({ post }) => {
       </div>
       <div className="p-6">
         <h3 className="mb-2 text-lg font-semibold">{truncatedTitle}</h3>
-        <p className="mb-4 text-sm text-gray-600">
+        {/* <p className="mb-4 text-sm text-gray-600">
           {post.content
             .replace(/<[^>]+>/g, '')
             .split(' ')
             .slice(0, 20)
             .join(' ') + '...'}
-        </p>
+        </p> */}
         <div className="flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4 text-gray-500" />

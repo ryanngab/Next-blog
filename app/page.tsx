@@ -1,12 +1,10 @@
-
-
-import React from 'react'
+import React from 'react';
 import KBar from '@/components/kbar';
-import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import AppSidebar from '@/components/layout/app-sidebar'
-import Header from '@/components/layout/header'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
+import AppSidebar from '@/components/layout/app-sidebar';
+import Header from '@/components/layout/header';
 import { cookies } from 'next/headers';
-import BlogPage from './blog/_components/BlogPage';
+import BlogPage from './(cvcoders)/blog/_components/BlogPage';
 
 const page = () => {
   const cookieStore = cookies();
@@ -14,17 +12,17 @@ const page = () => {
 
   return (
     <KBar>
-    <SidebarProvider defaultOpen={defaultOpen}>
-      <AppSidebar />
-      <SidebarInset>
-        <Header />
-        {/* page main content */}
-        <BlogPage/>
-        {/* page main content ends */}
-      </SidebarInset>
-    </SidebarProvider>
-  </KBar>
-  )
-}
+      <SidebarProvider defaultOpen={defaultOpen}>
+        <AppSidebar />
+        <SidebarInset>
+          <Header />
+          {/* page main content */}
+          <BlogPage />
+          {/* page main content ends */}
+        </SidebarInset>
+      </SidebarProvider>
+    </KBar>
+  );
+};
 
-export default page
+export default page;

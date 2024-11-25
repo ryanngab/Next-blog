@@ -1,8 +1,11 @@
 'use client';
 
+import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
 import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 const PopularBlog: React.FC = () => {
+  const router = useRouter();
   const [popularPosts, setPopularPosts] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -28,7 +31,13 @@ const PopularBlog: React.FC = () => {
     fetchPopularPosts();
   }, []);
 
-  if (loading) return <p>Loading popular blogs...</p>;
+  if (loading)
+    return (
+      <div className=" text-card-foreground">
+        <h2 className="mb-4 text-lg font-semibold">Popular Posts</h2>
+        <SkeletonLoaderList />
+      </div>
+    );
   if (popularPosts.length === 0) return <p>No popular blogs found.</p>;
 
   return (
@@ -43,7 +52,15 @@ const PopularBlog: React.FC = () => {
               className="h-16 w-16 rounded-md object-cover"
               loading="lazy"
             />
-            <div>
+            <div
+              onClick={() =>
+                router.push(
+                  `/products/${post.id}/${encodeURIComponent(
+                    post.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '-')
+                  )}`
+                )
+              }
+            >
               <h3 className="text-base font-medium transition-colors group-hover:text-blue-600">
                 {post.name}
               </h3>

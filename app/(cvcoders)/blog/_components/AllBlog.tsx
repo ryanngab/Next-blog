@@ -11,6 +11,8 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
+import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
+import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 
 const BlogPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
@@ -52,7 +54,7 @@ const BlogPage: React.FC = () => {
 
   return (
     <PageContainer scrollable>
-      <div className=" mx-auto flex flex-col lg:flex lg:gap-6">
+      <div className="mx-auto flex flex-col lg:flex lg:gap-6">
         {!loading ? (
           <>
             <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
@@ -104,7 +106,9 @@ const BlogPage: React.FC = () => {
             </div>
           </>
         ) : (
-          <div>Loading...</div>
+          <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+            <SkeletonLoaderCard />
+          </div>
         )}
       </div>
     </PageContainer>

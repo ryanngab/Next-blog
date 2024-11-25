@@ -5,6 +5,8 @@ import type { Metadata } from 'next';
 import { Lato } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import './globals.css';
+import { ConnectionAlertDialog } from '@/components/modal/ConnectionAlertDialog';
+import PreventInspect from '@/components/PreventInspect';
 
 export const metadata: Metadata = {
   title: 'Next Shadcn',
@@ -30,6 +32,8 @@ export default async function RootLayout({
       suppressHydrationWarning={true}
     >
       <body className={'overflow-hidden'}>
+        <PreventInspect />
+        <ConnectionAlertDialog />
         <NextTopLoader showSpinner={false} />
         <Providers session={session}>
           <Toaster />

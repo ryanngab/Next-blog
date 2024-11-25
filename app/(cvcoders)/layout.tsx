@@ -1,6 +1,9 @@
+import ConnectionDetector from '@/components/ConnectionDetector';
 import KBar from '@/components/kbar';
 import AppSidebar from '@/components/layout/app-sidebar';
 import Header from '@/components/layout/header';
+import { ConnectionAlertDialog } from '@/components/modal/ConnectionAlertDialog';
+import PreventInspect from '@/components/PreventInspect';
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar';
 import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
@@ -20,6 +23,8 @@ export default function DashboardLayout({
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
   return (
     <KBar>
+      <PreventInspect />
+      <ConnectionAlertDialog />
       <SidebarProvider defaultOpen={defaultOpen}>
         <AppSidebar />
         <SidebarInset>

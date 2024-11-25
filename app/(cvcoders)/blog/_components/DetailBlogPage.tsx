@@ -8,6 +8,7 @@ import './read.css';
 import TagsBlog from './TagsBlog';
 import PopularBlog from './PopularBlog';
 import { ShareModal } from '@/components/modal/ShareModal';
+import SkeleteonLoaderText from '@/components/loaders/SkeleteonLoaderText';
 
 const BlogDetailPage = () => {
   const params = useParams();
@@ -28,7 +29,14 @@ const BlogDetailPage = () => {
     fetchPost();
   }, [id]);
 
-  if (!post) return <div>Loading...</div>;
+  if (!post)
+    return (
+      <div className="container mx-auto px-4 lg:flex lg:gap-6">
+        <div className="flex flex-col gap-3 lg:w-3/4">
+          <SkeleteonLoaderText />
+        </div>
+      </div>
+    );
   return (
     <PageContainer scrollable>
       <div className="container mx-auto px-4 lg:flex lg:gap-6">

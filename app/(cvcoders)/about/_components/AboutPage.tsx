@@ -1,6 +1,6 @@
-import PopularBlog from '@/app/blog/_components/PopularBlog';
 import PageContainer from '@/components/layout/page-container';
 import React from 'react';
+import PopularBlog from '../../blog/_components/PopularBlog';
 
 const AboutPage = () => {
   return (

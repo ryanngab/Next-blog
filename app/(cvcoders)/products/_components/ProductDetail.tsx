@@ -7,9 +7,9 @@ import { CommentModal } from '@/components/modal/CommentModal';
 import { ShareModal } from '@/components/modal/ShareModal';
 import PageContainer from '@/components/layout/page-container';
 import TagsProducts from './TagsProducts';
-import PopularBlog from '@/app/blog/_components/PopularBlog';
 import SubFooter from '@/components/SubFooter';
-import { Tags } from 'lucide-react';
+import SkeleteonLoaderText from '@/components/loaders/SkeleteonLoaderText';
+import PopularBlog from '../../blog/_components/PopularBlog';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -43,7 +43,14 @@ const ProductDetailPage = () => {
     if (id) fetchProduct();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading)
+    return (
+      <div className="container mx-auto px-4 lg:flex lg:gap-6">
+        <div className="flex flex-col gap-3 lg:w-3/4">
+          <SkeleteonLoaderText />
+        </div>
+      </div>
+    );
 
   if (!product) return <p>Product not found!</p>;
 

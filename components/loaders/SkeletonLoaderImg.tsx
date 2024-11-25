@@ -4,7 +4,7 @@ const SkeletonLoaderImg = () => {
   return (
     <div
       role="status"
-      className="flex h-56 max-w-sm animate-pulse items-center justify-center rounded-lg bg-gray-300 dark:bg-gray-700"
+      className="flex h-[400px] w-full animate-pulse items-center justify-center rounded-lg bg-gray-300 object-cover dark:bg-gray-700"
     >
       <svg
         className="h-10 w-10 text-gray-200 dark:text-gray-600"
