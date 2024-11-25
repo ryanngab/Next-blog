@@ -3,7 +3,7 @@
 
 import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 interface Slide {
   id: number;
@@ -14,21 +14,23 @@ interface Slide {
   content: string;
 }
 
-interface SwiperBlogProps {
-  carouselData: Slide[];
-}
-
-const SwipperBlog: React.FC<SwiperBlogProps> = () => {
+const SwipperBlog: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [loading, setLoading] = useState(true);
   const [carouselData, setSwipperData] = useState<any[]>([]);
 
-  const nextSlide = () =>
-    setCurrentSlide((prev) => (prev + 1) % carouselData.length);
-  const prevSlide = () =>
-    setCurrentSlide(
-      (prev) => (prev - 1 + carouselData.length) % carouselData.length
-    );
+  const nextSlide = useCallback(
+    () => setCurrentSlide((prev) => (prev + 1) % carouselData.length),
+    [carouselData.length]
+  );
+
+  const prevSlide = useCallback(
+    () =>
+      setCurrentSlide(
+        (prev) => (prev - 1 + carouselData.length) % carouselData.length
+      ),
+    [carouselData.length]
+  );
 
   useEffect(() => {
     const fetchSwipperData = async () => {
@@ -54,7 +56,7 @@ const SwipperBlog: React.FC<SwiperBlogProps> = () => {
   useEffect(() => {
     const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
-  }, [carouselData.length]);
+  }, [carouselData.length, nextSlide]);
 
   if (loading) return <SkeletonLoaderImg />;
   return (
