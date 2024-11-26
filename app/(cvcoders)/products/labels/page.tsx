@@ -1,8 +1,8 @@
 import React from 'react';
-import labelsPages from './_components/labelsPages';
+import LabelsPages from './_components/LabelsPages';
 
 const page = () => {
-  return <labelsPages />;
+  return <LabelsPages />;
 };
 
 export default page;
