@@ -9,12 +9,12 @@ const TagsBlog = () => {
       <div className="mb-3 flex flex-wrap gap-2">
         <p className="font-bold">Tags </p>
         <div className="flex flex-wrap gap-3">
-          <Button variant="outline">Ini Category</Button>
+          <Button variant="outline">Ini labels</Button>
           <Link
             href="/dashboard/product/new"
             className={cn(buttonVariants(), 'text-xs md:text-sm')}
           >
-            Category
+            labels
           </Link>
         </div>
       </div>

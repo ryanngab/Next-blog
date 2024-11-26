@@ -60,7 +60,7 @@ const formSchema = z.object({
   description: z.string().min(10, {
     message: 'Description must be at least 10 characters.' // Deskripsi produk harus lebih dari 10 karakter
   }),
-  category: z.array(z.string()).optional(), // Tambahkan validasi untuk kategori
+  labels: z.array(z.string()).optional(), // Tambahkan validasi untuk kategori
   pinned: z.boolean().optional(), // Tambahkan validasi untuk kolom pinned
   swiper: z.boolean().optional() // Tambahkan validasi untuk kolom swiper
 });
@@ -73,28 +73,28 @@ export default function ProductForm({
   initialData: Product | null; // Data produk awal (jika ada)
   pageTitle: string; // Judul halaman
 }) {
-  const [category, setcategory] = useState<string[]>(
-    initialData?.category ? initialData.category.split(', ') : []
+  const [labels, setlabels] = useState<string[]>(
+    initialData?.labels ? initialData.labels.split(', ') : []
   ); // State untuk kategori produk
-  const [newCategory, setNewCategory] = useState<string>(''); // State untuk kategori baru
+  const [newlabels, setNewlabels] = useState<string>(''); // State untuk kategori baru
   const [imageType, setImageType] = useState<'upload' | 'url'>('upload'); // Untuk memilih metode input gambar
 
   // Fungsi untuk menambah kategori baru
-  const handleAddCategory = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleAddlabels = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const inputValue = event.currentTarget.value.trim();
 
-    if (event.key === 'Enter' && inputValue && !category.includes(inputValue)) {
+    if (event.key === 'Enter' && inputValue && !labels.includes(inputValue)) {
       event.preventDefault();
-      setcategory((prev) => [...prev, inputValue]);
+      setlabels((prev) => [...prev, inputValue]);
       event.currentTarget.value = ''; // Reset input field
-    } else if (inputValue && category.includes(inputValue)) {
-      alert('Category already exists!'); // Jika kategori sudah ada
+    } else if (inputValue && labels.includes(inputValue)) {
+      alert('labels already exists!'); // Jika kategori sudah ada
     }
   };
 
   // Fungsi untuk menghapus kategori
-  const handleRemoveCategory = (categoryToRemove: string) => {
-    setcategory((prev) => prev.filter((cat) => cat !== categoryToRemove)); // Menghapus kategori yang dipilih
+  const handleRemovelabels = (labelsToRemove: string) => {
+    setlabels((prev) => prev.filter((cat) => cat !== labelsToRemove)); // Menghapus kategori yang dipilih
   };
 
   // Fungsi untuk menangani pengiriman form
@@ -105,7 +105,7 @@ export default function ProductForm({
           .update({
             name: values.name,
             description: values.description,
-            category: category.join(', '), // Menggunakan state category yang diperbarui
+            labels: labels.join(', '), // Menggunakan state labels yang diperbarui
             price: values.price,
             photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
             pinned: values.pinned,
@@ -119,7 +119,7 @@ export default function ProductForm({
             {
               name: values.name,
               description: values.description,
-              category: category.join(', '), // Menggunakan state category yang diperbarui
+              labels: labels.join(', '), // Menggunakan state labels yang diperbarui
               price: values.price,
               photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
               pinned: values.pinned,
@@ -145,7 +145,7 @@ export default function ProductForm({
     description: initialData?.description || '',
     image: initialData?.photo_url ? [initialData.photo_url] : [],
     file: [], // Tambahkan nilai default untuk 'file'
-    category: initialData?.category ? initialData.category.split(', ') : [], // Ambil kategori dari initialData
+    labels: initialData?.labels ? initialData.labels.split(', ') : [], // Ambil kategori dari initialData
     pinned: initialData?.pinned || false, // Tambahkan nilai default untuk pinned
     swiper: initialData?.swiper || false // Tambahkan nilai default untuk swiper
   };
@@ -262,16 +262,16 @@ export default function ProductForm({
               {/* Form untuk kategori produk */}
               <FormField
                 control={form.control}
-                name="category"
+                name="labels"
                 render={() => (
                   <FormItem>
-                    <FormLabel>Category</FormLabel>
+                    <FormLabel>labels</FormLabel>
                     <FormControl>
                       <div>
                         <div className="mb-2 flex flex-wrap gap-2">
-                          {category.map(
+                          {labels.map(
                             (
-                              cat // Menggunakan state category
+                              cat // Menggunakan state labels
                             ) => (
                               <span
                                 key={cat}
@@ -280,7 +280,7 @@ export default function ProductForm({
                                 {cat}
                                 <button
                                   type="button"
-                                  onClick={() => handleRemoveCategory(cat)} // Menghapus kategori
+                                  onClick={() => handleRemovelabels(cat)} // Menghapus kategori
                                   className="ml-2 text-red-600"
                                 >
                                   &times;
@@ -290,22 +290,20 @@ export default function ProductForm({
                           )}
                         </div>
 
-                        <Select
-                          onValueChange={(value) => setNewCategory(value)}
-                        >
+                        <Select onValueChange={(value) => setNewlabels(value)}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select category" />
+                              <SelectValue placeholder="Select labels" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
                             <Input
-                              placeholder="Type and press Enter to add category"
-                              onKeyDown={handleAddCategory} // Menambahkan kategori
+                              placeholder="Type and press Enter to add labels"
+                              onKeyDown={handleAddlabels} // Menambahkan kategori
                             />
-                            {category.map(
+                            {labels.map(
                               (
-                                cat // Menggunakan state category
+                                cat // Menggunakan state labels
                               ) => (
                                 <SelectItem key={cat} value={cat}>
                                   {cat}

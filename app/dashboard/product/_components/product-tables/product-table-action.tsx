@@ -7,14 +7,14 @@ import { useProductTableFilters } from './use-product-table-filters';
 
 export default function ProductTableAction() {
   const {
-    categoriesFilter,
-    setCategoriesFilter,
+    labelsFilter,
+    setlabelsFilter,
     isAnyFilterActive,
     resetFilters,
     searchQuery,
     setPage,
     setSearchQuery,
-    categoryOptions
+    labelsOptions
   } = useProductTableFilters();
 
   return (
@@ -26,11 +26,11 @@ export default function ProductTableAction() {
         setPage={setPage}
       />
       <DataTableFilterBox
-        filterKey="categories"
-        title="Categories"
-        options={categoryOptions} // Gunakan kategori dari tabel
-        setFilterValue={setCategoriesFilter}
-        filterValue={categoriesFilter}
+        filterKey="labels"
+        title="labels"
+        options={labelsOptions} // Gunakan kategori dari tabel
+        setFilterValue={setlabelsFilter}
+        filterValue={labelsFilter}
       />
       <DataTableResetFilter
         isFilterActive={isAnyFilterActive}

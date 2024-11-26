@@ -11,7 +11,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
-import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
+
 import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 
 const BlogPage: React.FC = () => {
@@ -107,6 +107,15 @@ const BlogPage: React.FC = () => {
           </>
         ) : (
           <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-5">
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
+            <SkeletonLoaderCard />
             <SkeletonLoaderCard />
           </div>
         )}

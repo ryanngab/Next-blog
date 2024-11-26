@@ -92,7 +92,7 @@ export function ColumnActions({
               Are you sure want to delete column?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              NOTE: All tasks related to this category will also be deleted.
+              NOTE: All tasks related to this labels will also be deleted.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

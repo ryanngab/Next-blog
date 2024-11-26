@@ -55,8 +55,8 @@ const ProductDetailPage = () => {
   if (!product) return <p>Product not found!</p>;
 
   // Ubah kategori produk menjadi array (jika berupa string terpisah koma)
-  const categories = product.category
-    ? product.category.split(',').map((cat: string) => cat.trim())
+  const labels = product.labels
+    ? product.labels.split(',').map((cat: string) => cat.trim())
     : [];
 
   return (
@@ -89,7 +89,7 @@ const ProductDetailPage = () => {
             dangerouslySetInnerHTML={{ __html: product.description }}
             className="prose"
           />
-          <TagsProducts categories={categories} /> {/* Pass categories here */}
+          <TagsProducts labels={labels} /> {/* Pass labels here */}
           <CommentModal
             disqusConfig={{
               url: `http://localhost:3000/products/${product.id}`,
@@ -102,7 +102,7 @@ const ProductDetailPage = () => {
         <aside className="mt-8 lg:mt-0 lg:w-1/4">
           {/* Future components like PopularBlog */}
           <PopularBlog />
-          <TagsProducts categories={categories} />
+          <TagsProducts labels={labels} />
           <SubFooter />
         </aside>
       </div>

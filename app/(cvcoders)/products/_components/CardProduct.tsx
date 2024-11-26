@@ -13,7 +13,7 @@ interface CardProductProps {
     name: string;
     description: string;
     price: number;
-    category: string;
+    labels: string;
     photo_url: string;
     created_at: string;
   };

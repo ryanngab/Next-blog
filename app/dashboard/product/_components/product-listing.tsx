@@ -15,14 +15,14 @@ export default async function ProductListingPage({}: ProductListingPageProps) {
   const page = searchParamsCache.get('page');
   const search = searchParamsCache.get('q');
   const pageLimit = searchParamsCache.get('limit');
-  const categories = searchParamsCache.get('categories');
+  const labels = searchParamsCache.get('labels');
 
   // Membuat filter berdasarkan search params
   const filters = {
     page: Number(page) || 1, // Default ke halaman pertama jika tidak ada
     limit: Number(pageLimit) || 10, // Default ke 10 item per halaman
     ...(search && { search }),
-    ...(categories && { categories })
+    ...(labels && { labels })
   };
 
   // Mendapatkan data produk berdasarkan filter

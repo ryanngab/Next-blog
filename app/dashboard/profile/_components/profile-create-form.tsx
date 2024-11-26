@@ -34,11 +34,11 @@ import { SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
 
 interface ProfileFormType {
   initialData: any | null;
-  categories: any;
+  labels: any;
 }
 const ProfileCreateForm: React.FC<ProfileFormType> = ({
   initialData,
-  categories
+  labels
 }) => {
   const params = useParams();
   const router = useRouter();

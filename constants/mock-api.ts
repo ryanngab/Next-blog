@@ -10,7 +10,7 @@ export type Product = {
   id: number;
   name: string;
   description: string;
-  category: string;
+  labels: string;
   price: number;
   pinned: boolean;
   swiper: boolean;
@@ -56,26 +56,24 @@ export const supabaseProducts = {
 
   // Mengambil semua produk dengan filter kategori dan pencarian opsional
   async getAll({
-    categories = [],
+    labels = [],
     search
   }: {
-    categories?: string[];
+    labels?: string[];
     search?: string;
   }) {
     await this.initialize(); // Memastikan data cache terbaru diambil
     let products = [...this.records]; // Salin data dari cache
 
     // Filter berdasarkan kategori
-    if (categories.length > 0) {
-      products = products.filter((product) =>
-        categories.includes(product.category)
-      );
+    if (labels.length > 0) {
+      products = products.filter((product) => labels.includes(product.labels));
     }
 
     // Filter berdasarkan pencarian (nama, deskripsi, kategori)
     if (search) {
       products = matchSorter(products, search, {
-        keys: ['name', 'description', 'category']
+        keys: ['name', 'description', 'labels']
       });
     }
 
@@ -86,19 +84,19 @@ export const supabaseProducts = {
   async getProducts({
     page = 1,
     limit = 10,
-    categories,
+    labels,
     search
   }: {
     page?: number;
     limit?: number;
-    categories?: string;
+    labels?: string;
     search?: string;
   }) {
     await delay(1000); // Simulasi delay
 
-    const categoriesArray = categories ? categories.split('.') : [];
+    const labelsArray = labels ? labels.split('.') : [];
     const allProducts = await this.getAll({
-      categories: categoriesArray,
+      labels: labelsArray,
       search
     });
 

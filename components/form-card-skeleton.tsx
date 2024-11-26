@@ -24,7 +24,7 @@ export default function FormCardSkeleton() {
               <Skeleton className="h-10 w-full" /> {/* Input */}
             </div>
 
-            {/* Category field */}
+            {/* labels field */}
             <div className="space-y-2">
               <Skeleton className="h-4 w-20" /> {/* Label */}
               <Skeleton className="h-10 w-full" /> {/* Select */}

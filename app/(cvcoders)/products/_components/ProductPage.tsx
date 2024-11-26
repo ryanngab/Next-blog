@@ -20,7 +20,7 @@ import CardProduct from './CardProduct';
 const ITEMS_PER_PAGE = 6; // Jumlah item per halaman
 
 const ProductPage = () => {
-  const { category } = useParams(); // Mengambil parameter kategori dari URL
+  const { labels } = useParams(); // Mengambil parameter kategori dari URL
   const searchParams = useSearchParams(); // Mendapatkan parameter query
   const [products, setProducts] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -53,19 +53,18 @@ const ProductPage = () => {
       });
 
       // Gabungkan filter kategori dari URL dan parameter query
-      const categoriesFromQuery =
-        searchParams.get('categories')?.split('.') || []; // Split kategori berdasarkan tanda titik
+      const labelsFromQuery = searchParams.get('labels')?.split('.') || []; // Split kategori berdasarkan tanda titik
 
-      const categoryFilters = [];
-      if (category) categoryFilters.push(`category.ilike.%${category}%`);
-      if (categoriesFromQuery.length > 0) {
-        categoriesFromQuery.forEach((cat) =>
-          categoryFilters.push(`category.ilike.%${cat}%`)
+      const labelsFilters = [];
+      if (labels) labelsFilters.push(`labels.ilike.%${labels}%`);
+      if (labelsFromQuery.length > 0) {
+        labelsFromQuery.forEach((cat) =>
+          labelsFilters.push(`labels.ilike.%${cat}%`)
         );
       }
 
-      if (categoryFilters.length > 0) {
-        query = query.or(categoryFilters.join(','));
+      if (labelsFilters.length > 0) {
+        query = query.or(labelsFilters.join(','));
       }
 
       // Filter pencarian
@@ -93,7 +92,7 @@ const ProductPage = () => {
     };
 
     fetchProducts();
-  }, [category, searchQuery, searchParams, currentPage, isOnline]);
+  }, [labels, searchQuery, searchParams, currentPage, isOnline]);
 
   // Hitung total halaman
   const totalPages = Math.ceil(totalItems / ITEMS_PER_PAGE);
@@ -172,7 +171,7 @@ const ProductPage = () => {
                 )}
               </>
             ) : (
-              <p>No products found for selected categories</p>
+              <p>No products found for selected labels</p>
             )
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

@@ -4,21 +4,21 @@ import Link from 'next/link';
 import React from 'react';
 
 interface TagsProductsProps {
-  categories: string[]; // Array kategori produk
+  labels: string[]; // Array kategori produk
 }
 
-const TagsProducts: React.FC<TagsProductsProps> = ({ categories }) => {
+const TagsProducts: React.FC<TagsProductsProps> = ({ labels }) => {
   return (
     <div className="mb-3 mt-3 flex flex-wrap gap-2">
       <p className="font-bold">Tags</p>
       <div className="flex flex-wrap gap-3">
-        {categories.map((category, index) => (
+        {labels.map((labels, index) => (
           <Link
             key={index}
-            href={`/products/categories/${encodeURIComponent(category)}`}
+            href={`/products/labels/${encodeURIComponent(labels)}`}
             className={cn(buttonVariants(), 'text-xs md:text-sm')}
           >
-            {category}
+            {labels}
           </Link>
         ))}
       </div>

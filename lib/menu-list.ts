@@ -41,7 +41,7 @@ export function getMenuList(pathname: string): Group[] {
         }
       ]
     },
-    
+
     {
       groupLabel: 'Contents',
       menus: [
@@ -62,9 +62,9 @@ export function getMenuList(pathname: string): Group[] {
           ]
         },
         {
-          href: '/categories',
-          label: 'Categories',
-          active: pathname.includes('/categories'),
+          href: '/labels',
+          label: 'labels',
+          active: pathname.includes('/labels'),
           icon: Bookmark
         },
         {

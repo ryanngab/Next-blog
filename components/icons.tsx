@@ -94,7 +94,7 @@ export const Icons = {
   twitter: Twitter,
   check: Check,
   landing: Home,
-  category: Grid,
+  labels: Grid,
   bookmark: Bookmark,
   blog: FileText,
   about: Info,

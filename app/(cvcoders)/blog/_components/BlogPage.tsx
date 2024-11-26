@@ -14,7 +14,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
-import ButtonCategory from './ButtonCategory';
+import Buttonlabels from './Buttonlabels';
 import PinnedPost from './PinnedPost';
 import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
@@ -167,7 +167,7 @@ const BlogPage: React.FC = () => {
           {isOnline ? (
             <>
               <PopularBlog />
-              <ButtonCategory />
+              <Buttonlabels />
             </>
           ) : (
             <SkeletonLoaderList />

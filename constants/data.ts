@@ -117,7 +117,7 @@ export type Product = {
   created_at: string;
   price: number;
   id: number;
-  category: string;
+  labels: string;
   updated_at: string;
 };
 
@@ -130,6 +130,15 @@ export const navItems: NavItem[] = [
     shortcut: ['d', 'd'],
     items: [],
     requiresAuth: true // Ini hanya muncul saat user login
+  },
+  {
+    title: 'Protected',
+    url: '/protected',
+    icon: 'dashboard',
+    isActive: false,
+    shortcut: ['d', 'd'],
+    items: [],
+    requiresAuth: false // Ini hanya muncul saat user login
   },
   {
     title: 'Employee',
@@ -200,9 +209,9 @@ export const navItems: NavItem[] = [
     requiresAuth: false
   },
   {
-    title: 'Category',
-    url: '/category',
-    icon: 'category',
+    title: 'labels',
+    url: '/labels',
+    icon: 'labels',
     isActive: false,
     shortcut: ['d', 'd'],
     items: [],
