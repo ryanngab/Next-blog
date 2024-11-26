@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form';
 import GithubSignInButton from './github-auth-button';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { signInAction } from '@/app/actions';
+import { forgotPasswordAction } from '@/app/actions';
 import Link from 'next/link';
 
 export default function LoginPage() {
@@ -30,41 +30,21 @@ export default function LoginPage() {
               </FormItem>
             )}
           />
-          <FormField
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <div className="flex justify-between">
-                  <FormLabel>Password:</FormLabel>
-                  <Link
-                    className="text-sm font-medium text-primary underline"
-                    href="/forgot-password"
-                  >
-                    Forgot Password{' '}
-                  </Link>
-                </div>
-                <FormControl>
-                  <Input id="password" type="password" required {...field} />
-                </FormControl>
-              </FormItem>
-            )}
-          />
           <p className="text text-sm text-foreground">
-            Dont Have account ?{' '}
+            Already have an account?{' '}
             <Link
               className="font-medium text-primary underline"
-              href="/sign-up"
+              href="/sign-in"
             >
-              Sign up
+              Sign in
             </Link>
           </p>
-
           <Button
-            formAction={signInAction}
+            formAction={forgotPasswordAction}
             className="ml-auto w-full"
             type="submit"
           >
-            Sign in
+            Sign up
           </Button>
         </form>
       </Form>
