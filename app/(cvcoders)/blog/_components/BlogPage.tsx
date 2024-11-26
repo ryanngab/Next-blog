@@ -21,10 +21,6 @@ import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
 import SkeletonLoaderPinned from '@/components/loaders/SkeletonLoaderPinned';
 import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
 
-export const metadata = {
-  title: 'CVCODERS: Blog'
-};
-
 const BlogPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -139,6 +135,11 @@ const BlogPage: React.FC = () => {
                 <div className="text-card-foreground">
                   <h2 className="mb-4 text-lg font-semibold">Blog Post</h2>
                   <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <SkeletonLoaderCard />
+                    <SkeletonLoaderCard />
+                    <SkeletonLoaderCard />
+                    <SkeletonLoaderCard />
+                    <SkeletonLoaderCard />
                     <SkeletonLoaderCard />
                   </div>
                 </div>

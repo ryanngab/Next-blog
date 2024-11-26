@@ -6,6 +6,10 @@ import Header from '@/components/layout/header';
 import { cookies } from 'next/headers';
 import BlogPage from './(cvcoders)/blog/_components/BlogPage';
 
+export const metadata = {
+  title: 'CVCODERS'
+};
+
 const page = () => {
   const cookieStore = cookies();
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';

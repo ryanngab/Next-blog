@@ -32,7 +32,7 @@ export default async function RootLayout({
       suppressHydrationWarning={true}
     >
       <body className={'overflow-hidden'}>
-        <PreventInspect />
+        {/* <PreventInspect /> */}
         <ConnectionAlertDialog />
         <NextTopLoader showSpinner={false} />
         <Providers session={session}>

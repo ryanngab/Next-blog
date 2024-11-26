@@ -9,7 +9,7 @@ import type { Metadata } from 'next';
 import { cookies } from 'next/headers';
 
 export const metadata: Metadata = {
-  title: 'Next Shadcn Dashboard Starter',
+  title: 'CVCODERS',
   description: 'Basic dashboard with Next.js and Shadcn'
 };
 
@@ -23,7 +23,7 @@ export default function DashboardLayout({
   const defaultOpen = cookieStore.get('sidebar:state')?.value === 'true';
   return (
     <KBar>
-      <PreventInspect />
+      {/* <PreventInspect /> */}
       <AdblockDialog />
       <ConnectionAlertDialog />
       <SidebarProvider defaultOpen={defaultOpen}>

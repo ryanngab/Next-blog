@@ -16,6 +16,26 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'images.unsplash.com',
         port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'via.placeholder.com',
+        port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'blogger.googleusercontent.com',
+        port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'darkcssweb.com',
+        port: ''
+      },
+      {
+        protocol: 'https',
+        hostname: 'www.codingnepalweb.com',
+        port: ''
       }
     ]
   },

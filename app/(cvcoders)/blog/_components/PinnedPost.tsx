@@ -53,34 +53,39 @@ const PinnedPost: React.FC = () => {
   return (
     <>
       <h2 className="mb-2 mt-8 text-lg font-semibold">Pinned Post</h2>
+
       {/* <hr className='mb-2' /> */}
-      <div className="group w-full cursor-pointer rounded-xl border bg-card text-card-foreground shadow transition-shadow duration-300 hover:shadow-xl">
-        {pinnedPost && ( // ganti map dengan conditional rendering
+      <div className="rounded-lg border border-gray-300 p-4">
+        {pinnedPost && (
           <div key={pinnedPost.id} className="flex flex-col gap-6 lg:flex-row">
             <div className="lg:w-1/3">
-              <img
+              <Image
                 src={pinnedPost.photo_url || 'https://via.placeholder.com/150'}
                 alt={pinnedPost.name}
-                className="h-48 w-full object-cover"
+                className="h-48 w-full rounded-lg object-cover"
                 loading="lazy"
+                width={200}
+                height={200}
               />
             </div>
             <div className="lg:w-2/3">
-              <div className="flex flex-col p-4">
-                <h3 className="mb-2 text-lg font-semibold">
-                  {pinnedPost.name}
-                </h3>
-                <p className="mb-4 text-sm text-gray-600">
-                  {pinnedPost.description}
-                </p>
-                <p className="mb-4 text-gray-600">
-                  ${pinnedPost.price} / Rp.
-                  {(pinnedPost.price * 15000).toLocaleString()}
-                </p>
+              <div className="flex h-full flex-col p-4">
+                <div>
+                  <h3 className="mb-2 text-lg font-semibold">
+                    {pinnedPost.name}
+                  </h3>
+                  <p className="mb-4 text-sm text-gray-600">
+                    {pinnedPost.description}
+                  </p>
+                  <p className="text-gray-600">
+                    ${pinnedPost.price} / Rp.
+                    {(pinnedPost.price * 15000).toLocaleString()}
+                  </p>
+                </div>
                 <div className="mt-auto flex justify-between gap-3">
                   <Link
                     href="sssss"
-                    className={cn(buttonVariants(), ' text-xs md:text-sm')}
+                    className={cn(buttonVariants(), 'text-xs md:text-sm')}
                   >
                     Buy Now
                     <ShoppingCartIcon className="ms-3 h-5 w-5" />

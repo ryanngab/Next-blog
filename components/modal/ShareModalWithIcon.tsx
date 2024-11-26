@@ -19,7 +19,7 @@ export function ShareModalWithIcon() {
       <DialogTrigger asChild>
         <Button
           variant="ghost"
-          className="rounded-full bg-white p-2 shadow hover:bg-gray-100"
+          className="rounded-full bg-white p-2 hover:bg-gray-100 hover:shadow-xl"
         >
           <Share2 className="h-5 w-5 text-gray-800" />
         </Button>

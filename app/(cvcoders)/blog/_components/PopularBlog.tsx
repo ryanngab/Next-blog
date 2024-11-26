@@ -3,6 +3,7 @@
 import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
 
 const PopularBlog: React.FC = () => {
   const router = useRouter();
@@ -46,11 +47,13 @@ const PopularBlog: React.FC = () => {
       <div className="space-y-4">
         {popularPosts.map((post) => (
           <div key={post.id} className="group flex cursor-pointer gap-3">
-            <img
+            <Image
               src={`${post.photo_url}`}
               alt={post.name}
               className="h-16 w-16 rounded-md object-cover"
               loading="lazy"
+              width={200}
+              height={200}
             />
             <div
               onClick={() =>

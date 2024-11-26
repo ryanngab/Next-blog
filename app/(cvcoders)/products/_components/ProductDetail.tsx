@@ -10,6 +10,7 @@ import TagsProducts from './TagsProducts';
 import SubFooter from '@/components/SubFooter';
 import SkeleteonLoaderText from '@/components/loaders/SkeleteonLoaderText';
 import PopularBlog from '../../blog/_components/PopularBlog';
+import Image from 'next/image';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -74,11 +75,13 @@ const ProductDetailPage = () => {
             </div>
           </div>
           <div>
-            <img
+            <Image
               src={product.photo_url || 'https://via.placeholder.com/150'}
               alt={product.name}
               className="rounded-lg object-cover"
               loading="lazy"
+              width={200}
+              height={200}
             />
           </div>
           <p className="mt-2 text-lg">

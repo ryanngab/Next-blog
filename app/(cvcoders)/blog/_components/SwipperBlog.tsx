@@ -3,6 +3,7 @@
 
 import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
+import Image from 'next/image';
 import React, { useState, useEffect, useCallback } from 'react';
 
 interface Slide {
@@ -68,11 +69,13 @@ const SwipperBlog: React.FC = () => {
         {carouselData.map((slide) => (
           <div key={slide.id} className="w-full flex-shrink-0">
             <div className="relative">
-              <img
+              <Image
                 src={`${slide.photo_url}`}
                 alt={slide.name}
                 className={`h-[400px] w-full object-cover`}
                 loading="lazy"
+                width={200}
+                height={200}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
                 <h2 className="mb-2 text-2xl font-bold text-white">

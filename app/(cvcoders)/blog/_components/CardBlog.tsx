@@ -2,6 +2,7 @@ import React from 'react';
 import { useRouter } from 'next/navigation';
 import { Bookmark, Clock, Calendar } from 'lucide-react'; // Import ikon yang diperlukan
 import { ShareModalWithIcon } from '@/components/modal/ShareModalWithIcon';
+import Image from 'next/image';
 
 interface Post {
   id: string;
@@ -66,27 +67,30 @@ const CardBlog: React.FC<CardBlogProps> = ({ post }) => {
           )}`
         )
       }
-      className="group relative cursor-pointer overflow-hidden rounded-xl border bg-card text-card-foreground shadow transition-shadow duration-300 hover:shadow-xl"
+      className="cursor-pointer rounded-lg border border-gray-300 p-4 transition duration-300 hover:bg-gray-100"
     >
       <div className="relative">
-        <img
+        <Image
           src={firstImage || post.image || 'https://via.placeholder.com/150'}
           alt={post.title}
-          className="h-48 w-full object-cover"
+          width={200}
+          height={200}
+          className="h-48 w-full rounded-lg object-cover"
           loading="lazy"
         />
         <div className="absolute right-2 top-2 z-10">
           <button
             aria-label="Bookmark"
-            className="mr-2 rounded-full bg-white bg-opacity-80 p-2 transition hover:bg-opacity-100"
+            className="mr-2 rounded-full bg-white p-2 transition hover:bg-gray-100 hover:shadow-xl"
           >
             <Bookmark className="h-5 w-5 text-gray-800" />
           </button>
           <ShareModalWithIcon />
         </div>
       </div>
-      <div className="p-6">
-        <h3 className="mb-2 text-lg font-semibold">{truncatedTitle}</h3>
+      <div className="flex h-[calc(100%-12rem)] flex-col justify-between">
+        <h3 className="text-md mb-4 pt-3 font-semibold">{truncatedTitle}</h3>
+
         {/* <p className="mb-4 text-sm text-gray-600">
           {post.content
             .replace(/<[^>]+>/g, '')
@@ -94,15 +98,14 @@ const CardBlog: React.FC<CardBlogProps> = ({ post }) => {
             .slice(0, 20)
             .join(' ') + '...'}
         </p> */}
-        <div className="flex items-center justify-between text-xs text-gray-500">
+        <div className="mt-auto flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center space-x-1">
             <Calendar className="h-4 w-4 text-gray-500" />
-            <span>{formatDate(post.published)}</span>{' '}
-            {/* Tanggal dengan format yang diinginkan */}
+            <span>{formatDate(post.published)}</span>
           </div>
           <div className="flex items-center space-x-1">
             <Clock className="h-4 w-4 text-gray-500" />
-            <span>{readingTime}</span> {/* Waktu baca */}
+            <span>{readingTime}</span>
           </div>
         </div>
       </div>
