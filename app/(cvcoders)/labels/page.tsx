@@ -1,5 +1,5 @@
 import React from 'react';
-import labelsPage from './_components/labelsPage';
+import LabelsPage from './_components/LabelsPage';
 
 export const metadata = {
   title: 'CVCODERS : labels'
@@ -8,7 +8,7 @@ export const metadata = {
 const page = () => {
   return (
     <div>
-      <labelsPage />
+      <LabelsPage />
     </div>
   );
 };
