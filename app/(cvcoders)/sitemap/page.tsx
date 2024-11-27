@@ -15,6 +15,7 @@ interface Post {
   price: number;
   photo_url: string;
   pinned: boolean;
+  slug: string;
 }
 
 const PinnedPost: React.FC = () => {
@@ -88,7 +89,7 @@ const PinnedPost: React.FC = () => {
                   >
                     View Details
                   </Link>
-                  <ShareModalWithIcon />
+                  <ShareModalWithIcon url={`/products/${pinnedPost.slug}`} />
                 </div>
               </div>
             </div>
