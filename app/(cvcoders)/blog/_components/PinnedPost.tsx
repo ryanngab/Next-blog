@@ -63,9 +63,9 @@ const PinnedPost: React.FC = () => {
                 src={pinnedPost.photo_url || 'https://via.placeholder.com/150'}
                 alt={pinnedPost.name}
                 className="h-48 w-full rounded-lg object-cover"
-                width={400}
-                height={400}
-                priority // Makes the image load eagerly
+                loading="lazy"
+                width={200}
+                height={200}
               />
             </div>
             <div className="lg:w-2/3">
