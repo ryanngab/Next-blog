@@ -55,15 +55,7 @@ const PopularBlog: React.FC = () => {
               width={200}
               height={200}
             />
-            <div
-              onClick={() =>
-                router.push(
-                  `/products/${post.id}/${encodeURIComponent(
-                    post.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '-')
-                  )}`
-                )
-              }
-            >
+            <div onClick={() => router.push(`/products/${post.slug}`)}>
               <h3 className="text-base font-medium transition-colors group-hover:text-blue-600">
                 {post.name}
               </h3>

@@ -9,7 +9,7 @@ export async function generateMetadata({
   const { title } = params;
 
   return {
-    title: `Blog: ${decodeURIComponent(title.replace(/-/g, ' '))}`
+    title: `${decodeURIComponent(title.replace(/-/g, ' '))}`
   };
 }
 

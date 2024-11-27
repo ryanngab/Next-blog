@@ -13,7 +13,7 @@ export type Product = {
   labels: string;
   price: number;
   pinned: boolean;
-  swiper: boolean;
+  swipper: boolean;
   photo_url: string;
   created_at: string;
   updated_at: string;

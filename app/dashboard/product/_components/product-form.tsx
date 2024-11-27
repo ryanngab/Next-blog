@@ -62,7 +62,7 @@ const formSchema = z.object({
   }),
   labels: z.array(z.string()).optional(), // Tambahkan validasi untuk kategori
   pinned: z.boolean().optional(), // Tambahkan validasi untuk kolom pinned
-  swiper: z.boolean().optional() // Tambahkan validasi untuk kolom swiper
+  swipper: z.boolean().optional() // Tambahkan validasi untuk kolom swiper
 });
 
 // Fungsi utama untuk form produk
@@ -97,44 +97,83 @@ export default function ProductForm({
     setlabels((prev) => prev.filter((cat) => cat !== labelsToRemove)); // Menghapus kategori yang dipilih
   };
 
+  // Fungsi untuk generate basic slug
+  const generateSlug = (text: string): string => {
+    return text
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/(^-|-$)/g, '');
+  };
+
+  // Fungsi untuk mengecek dan generate unique slug
+  const generateUniqueSlug = async (name: string): Promise<string> => {
+    let baseSlug = generateSlug(name);
+    let slug = baseSlug;
+    let counter = 0;
+
+    while (true) {
+      // Cek apakah slug sudah ada
+      const { data } = await supabase
+        .from('products')
+        .select('slug')
+        .eq('slug', slug)
+        .single();
+
+      // Jika tidak ada data, berarti slug unik
+      if (!data) break;
+
+      // Jika ada, tambah counter
+      counter++;
+      slug = `${baseSlug}-${counter}`;
+    }
+
+    return slug;
+  };
+
   // Fungsi untuk menangani pengiriman form
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const { data, error } = initialData
-      ? await supabase
-          .from('products') // Nama tabel di Supabase
-          .update({
-            name: values.name,
-            description: values.description,
-            labels: labels.join(', '), // Menggunakan state labels yang diperbarui
-            price: values.price,
-            photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
-            pinned: values.pinned,
-            swiper: values.swiper,
-            updated_at: new Date().toISOString() // Tanggal diperbarui
-          })
-          .eq('id', initialData.id) // Mengupdate berdasarkan ID produk
-      : await supabase
-          .from('products') // Nama tabel di Supabase
-          .insert([
+    try {
+      // Generate unique slug
+      const slug = await generateUniqueSlug(values.name);
+
+      // Data yang akan dikirim
+      const productData = {
+        name: values.name,
+        slug, // Tambahkan slug
+        description: values.description,
+        labels: labels.join(', '),
+        price: values.price,
+        photo_url: values.image?.[0] || '',
+        pinned: values.pinned || false,
+        updated_at: new Date().toISOString()
+      };
+
+      const { data, error } = initialData
+        ? await supabase
+            .from('products')
+            .update({
+              ...productData,
+              // Jika nama berubah, update slug
+              slug: initialData.name !== values.name ? slug : initialData.slug
+            })
+            .eq('id', initialData.id)
+        : await supabase.from('products').insert([
             {
-              name: values.name,
-              description: values.description,
-              labels: labels.join(', '), // Menggunakan state labels yang diperbarui
-              price: values.price,
-              photo_url: values.image?.[0] || '', // Gunakan optional chaining untuk menghindari error
-              pinned: values.pinned,
-              swiper: values.swiper,
-              created_at: new Date().toISOString(), // Tanggal dibuat
-              updated_at: new Date().toISOString() // Tanggal diperbarui
+              ...productData,
+              created_at: new Date().toISOString()
             }
           ]);
 
-    if (error) {
-      console.error('Error inserting/updating data:', error);
-      alert('Failed to save product.'); // Menampilkan pesan kesalahan
-    } else {
-      console.log('Product saved:', data);
-      alert('Product saved successfully!'); // Menampilkan pesan sukses
+      if (error) {
+        console.error('Error inserting/updating data:', error);
+        alert('Failed to save product.');
+      } else {
+        console.log('Product saved:', data);
+        alert('Product saved successfully!');
+      }
+    } catch (error) {
+      console.error('Error generating slug:', error);
+      alert('Failed to generate slug.');
     }
   }
 
@@ -147,7 +186,7 @@ export default function ProductForm({
     file: [], // Tambahkan nilai default untuk 'file'
     labels: initialData?.labels ? initialData.labels.split(', ') : [], // Ambil kategori dari initialData
     pinned: initialData?.pinned || false, // Tambahkan nilai default untuk pinned
-    swiper: initialData?.swiper || false // Tambahkan nilai default untuk swiper
+    swipper: initialData?.swipper || false // Tambahkan nilai default untuk swiper
   };
 
   // Hook untuk mengelola form dengan validasi dari Zod
@@ -381,7 +420,7 @@ export default function ProductForm({
               {/* Form untuk swiper sebagai switcher */}
               <FormField
                 control={form.control}
-                name="swiper"
+                name="swipper"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Swiper</FormLabel>

@@ -1,5 +1,3 @@
-'use client';
-
 import React from 'react';
 import { Bookmark, Calendar, ShoppingCartIcon } from 'lucide-react';
 import Link from 'next/link';
@@ -14,12 +12,14 @@ interface CardProductProps {
     id: number;
     name: string;
     description: string;
+    slug: string;
     price: number;
     labels: string;
     photo_url: string;
     created_at: string;
   };
 }
+
 const truncateText = (text: string, maxWords: number): string => {
   const words = text.split(' ');
   return words.length > maxWords
@@ -30,15 +30,10 @@ const truncateText = (text: string, maxWords: number): string => {
 const CardProduct: React.FC<CardProductProps> = ({ product }) => {
   const router = useRouter();
   const truncatedDescription = truncateText(product.description, 10);
+
   return (
     <div
-      onClick={() =>
-        router.push(
-          `/products/${product.id}/${encodeURIComponent(
-            product.name.replace(/[^a-zA-Z0-9 ]/g, '').replace(/ /g, '-')
-          )}`
-        )
-      }
+      onClick={() => router.push(`/products/${product.slug}`)}
       className="cursor-pointer rounded-lg border border-gray-300 p-4 hover:shadow-xl"
     >
       <div className="relative">
@@ -50,14 +45,20 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
           height={200}
           loading="lazy"
         />
-        <div className="absolute right-2 top-2 z-10">
+        <div className="absolute right-2 top-2 z-10 flex">
           <button
             aria-label="Bookmark"
+            onClick={(e) => {
+              e.stopPropagation(); // Menghentikan event propagation
+              // Logika bookmark disini
+            }}
             className="mr-2 rounded-full bg-white p-2 transition hover:shadow-xl"
           >
             <Bookmark className="h-5 w-5 text-gray-800" />
           </button>
-          <ShareModalWithIcon />
+          <div onClick={(e) => e.stopPropagation()}>
+            <ShareModalWithIcon url={`/products/${product.slug}`} />
+          </div>
         </div>
       </div>
       <div className="flex h-[calc(100%-12rem)] flex-col justify-between">
@@ -71,7 +72,7 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
         <div className="flex items-center justify-between text-xs text-gray-500">
           <div className="flex items-center space-x-1">
             <Link
-              href="#"
+              href={`/products/${product.slug}`}
               className={cn(buttonVariants(), 'w-full text-xs md:text-sm')}
             >
               Buy Now

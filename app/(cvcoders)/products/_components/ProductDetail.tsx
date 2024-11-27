@@ -17,8 +17,8 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-const ProductDetailPage = () => {
-  const { id } = useParams();
+const ProductDetail = () => {
+  const { slug } = useParams(); // Menggunakan slug dari URL
   const [product, setProduct] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
@@ -29,7 +29,7 @@ const ProductDetailPage = () => {
         const { data, error } = await supabase
           .from('products')
           .select('*')
-          .eq('id', id)
+          .eq('slug', slug) // Menggunakan slug sebagai parameter
           .single();
 
         if (error) throw error;
@@ -41,8 +41,8 @@ const ProductDetailPage = () => {
       }
     };
 
-    if (id) fetchProduct();
-  }, [id]);
+    if (slug) fetchProduct();
+  }, [slug]);
 
   if (loading)
     return (
@@ -80,8 +80,8 @@ const ProductDetailPage = () => {
               alt={product.name}
               className="rounded-lg object-cover"
               loading="lazy"
-              width={200}
-              height={200}
+              width={1000}
+              height={100}
             />
           </div>
           <p className="mt-2 text-lg">
@@ -95,9 +95,9 @@ const ProductDetailPage = () => {
           <TagsProducts labels={labels} /> {/* Pass labels here */}
           <CommentModal
             disqusConfig={{
-              url: `http://localhost:3000/products/${product.id}`,
-              identifier: product.id,
-              title: product.title
+              url: `http://localhost:3000/products/${product.slug}`,
+              identifier: product.slug,
+              title: product.name
             }}
           />
         </div>
@@ -113,4 +113,4 @@ const ProductDetailPage = () => {
   );
 };
 
-export default ProductDetailPage;
+export default ProductDetail;

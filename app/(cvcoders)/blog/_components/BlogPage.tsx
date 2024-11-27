@@ -15,11 +15,11 @@ import {
   PaginationPrevious
 } from '@/components/ui/pagination';
 import Buttonlabels from './Buttonlabels';
-import PinnedPost from './PinnedPost';
 import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
 import SkeletonLoaderPinned from '@/components/loaders/SkeletonLoaderPinned';
 import SkeletonLoaderList from '@/components/loaders/SkeletonLoaderList';
+import PinnedPost from './PinnedPost';
 
 const BlogPage: React.FC = () => {
   const [posts, setPosts] = useState<any[]>([]);

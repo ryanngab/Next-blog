@@ -1,8 +1,9 @@
+'use client';
+
 import SkeletonLoaderPinned from '@/components/loaders/SkeletonLoaderPinned';
 import { ShareModalWithIcon } from '@/components/modal/ShareModalWithIcon';
 import { buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ShoppingCartIcon } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
@@ -18,7 +19,7 @@ interface Post {
 
 const PinnedPost: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
-  const [pinnedPost, setPinnedPost] = useState<Post | null>(null); // ubah tipe state
+  const [pinnedPost, setPinnedPost] = useState<Post | null>(null);
 
   useEffect(() => {
     const fetchSwipperData = async () => {
@@ -44,7 +45,7 @@ const PinnedPost: React.FC = () => {
 
   if (loading)
     return (
-      <div className=" text-card-foreground">
+      <div className="text-card-foreground">
         <h2 className="mb-4 text-lg font-semibold">Pinned Post</h2>
         <SkeletonLoaderPinned />
       </div>
@@ -53,8 +54,6 @@ const PinnedPost: React.FC = () => {
   return (
     <>
       <h2 className="mb-2 mt-8 text-lg font-semibold">Pinned Post</h2>
-
-      {/* <hr className='mb-2' /> */}
       <div className="rounded-lg border border-gray-300 p-4">
         {pinnedPost && (
           <div key={pinnedPost.id} className="flex flex-col gap-6 lg:flex-row">
@@ -84,12 +83,15 @@ const PinnedPost: React.FC = () => {
                 </div>
                 <div className="mt-auto flex justify-between gap-3">
                   <Link
-                    href="sssss"
+                    href={`/products/${pinnedPost.id}/${pinnedPost.name.replace(
+                      /\s+/g,
+                      '-'
+                    )}`}
                     className={cn(buttonVariants(), 'text-xs md:text-sm')}
                   >
-                    Buy Now
-                    <ShoppingCartIcon className="ms-3 h-5 w-5" />
+                    View Details
                   </Link>
+
                   <ShareModalWithIcon />
                 </div>
               </div>

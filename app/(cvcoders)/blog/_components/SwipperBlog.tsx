@@ -4,6 +4,7 @@
 import SkeletonLoaderImg from '@/components/loaders/SkeletonLoaderImg';
 import { ArrowLeft, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState, useEffect, useCallback } from 'react';
 
 interface Slide {
@@ -78,13 +79,20 @@ const SwipperBlog: React.FC = () => {
                 height={200}
               />
               <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
-                <h2 className="mb-2 text-2xl font-bold text-white">
-                  {slide.name}
-                </h2>
-                <p className="mb-1 text-gray-200">{slide.author}</p>
-                <p className="text-sm text-gray-300">
-                  {new Date(slide.created_at).toLocaleDateString()}
-                </p>
+                <Link
+                  href={`/products/${slide.id}/${slide.name.replace(
+                    /\s+/g,
+                    '-'
+                  )}`}
+                >
+                  <h2 className="mb-2 text-2xl font-bold text-white">
+                    {slide.name}
+                  </h2>
+                  <p className="mb-1 text-gray-200">{slide.author}</p>
+                  <p className="text-sm text-gray-300">
+                    {new Date(slide.created_at).toLocaleDateString()}
+                  </p>
+                </Link>
               </div>
             </div>
           </div>

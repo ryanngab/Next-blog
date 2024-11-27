@@ -85,7 +85,7 @@ const CardBlog: React.FC<CardBlogProps> = ({ post }) => {
           >
             <Bookmark className="h-5 w-5 text-gray-800" />
           </button>
-          <ShareModalWithIcon />
+          <ShareModalWithIcon url={`/blog/${post.title}`} />
         </div>
       </div>
       <div className="flex h-[calc(100%-12rem)] flex-col justify-between">

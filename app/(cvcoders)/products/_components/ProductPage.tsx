@@ -17,7 +17,7 @@ import { useProductTableFilters } from '@/app/dashboard/product/_components/prod
 import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 import CardProduct from './CardProduct';
 
-const ITEMS_PER_PAGE = 6; // Jumlah item per halaman
+const ITEMS_PER_PAGE = 8; // Jumlah item per halaman
 
 const ProductPage = () => {
   const { labels } = useParams(); // Mengambil parameter kategori dari URL
