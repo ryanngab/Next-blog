@@ -12,6 +12,7 @@ export type Product = {
   description: string;
   labels: string;
   price: number;
+  slug: string;
   pinned: boolean;
   swipper: boolean;
   photo_url: string;
