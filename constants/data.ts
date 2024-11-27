@@ -122,83 +122,29 @@ export type Product = {
 };
 
 export const navItems: NavItem[] = [
-  {
-    title: 'Dashboard',
-    url: '/dashboard/overview',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: true // Ini hanya muncul saat user login
-  },
-  {
-    title: 'Protected',
-    url: '/protected',
-    icon: 'dashboard',
-    isActive: false,
-    shortcut: ['d', 'd'],
-    items: [],
-    requiresAuth: false // Ini hanya muncul saat user login
-  },
-  {
-    title: 'Employee',
-    url: '/dashboard/employee',
-    icon: 'user',
-    shortcut: ['e', 'e'],
-    isActive: false,
-    items: [],
-    requiresAuth: true
-  },
-  {
-    title: 'Product',
-    url: '/dashboard/product',
-    icon: 'product',
-    shortcut: ['p', 'p'],
-    isActive: false,
-    items: [],
-    requiresAuth: true
-  },
   // {
-  //   title: 'Adsense',
-  //   url: '/dashboard/adsense',
-  //   icon: 'adsense',
-  //   isActive: false,
-  //   shortcut: ['d', 'd'],
-  //   items: [],
+  //   title: 'Account',
+  //   url: '#',
+  //   icon: 'user',
+  //   isActive: true,
+  //   items: [
+  //     {
+  //       title: 'Profile',
+  //       url: '/dashboard/profile',
+  //       icon: 'user',
+  //       shortcut: ['m', 'm'],
+  //       requiresAuth: true // Ini juga hanya muncul saat login
+  //     },
+  //     {
+  //       title: 'Login',
+  //       shortcut: ['l', 'l'],
+  //       url: '/',
+  //       icon: 'login',
+  //       requiresAuth: false // Ini muncul tanpa login
+  //     }
+  //   ],
   //   requiresAuth: true
   // },
-  {
-    title: 'Account',
-    url: '#',
-    icon: 'user',
-    isActive: true,
-    items: [
-      {
-        title: 'Profile',
-        url: '/dashboard/profile',
-        icon: 'user',
-        shortcut: ['m', 'm'],
-        requiresAuth: true // Ini juga hanya muncul saat login
-      },
-      {
-        title: 'Login',
-        shortcut: ['l', 'l'],
-        url: '/',
-        icon: 'login',
-        requiresAuth: false // Ini muncul tanpa login
-      }
-    ],
-    requiresAuth: true
-  },
-  {
-    title: 'Kanban',
-    url: '/dashboard/kanban',
-    icon: 'kanban',
-    shortcut: ['k', 'k'],
-    isActive: false,
-    items: [],
-    requiresAuth: true
-  },
   {
     title: 'Landing',
     url: '/',

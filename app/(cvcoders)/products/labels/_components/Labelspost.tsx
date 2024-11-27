@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useParams } from 'next/navigation';
 import SupabaseClient from '@/lib/supabaseClient';
-import ProductTableAction from '@/app/dashboard/product/_components/product-tables/product-table-action';
+import ProductTableAction from '@/app/(cvcoders)/products/_components/product-tables/product-table-action';
 import PageContainer from '@/components/layout/page-container';
 import {
   Pagination,
@@ -13,7 +13,7 @@ import {
   PaginationNext,
   PaginationPrevious
 } from '@/components/ui/pagination';
-import { useProductTableFilters } from '@/app/dashboard/product/_components/product-tables/use-product-table-filters';
+import { useProductTableFilters } from '@/app/(cvcoders)/products/_components/product-tables/use-product-table-filters';
 import CardProduct from '../../_components/CardProduct';
 import SkeletonLoaderCard from '@/components/loaders/SkeletonLoaderCard';
 

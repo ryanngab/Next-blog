@@ -69,12 +69,12 @@ const PinnedPost: React.FC = () => {
               />
             </div>
             <div className="lg:w-2/3">
-              <div className="flex h-full flex-col p-4">
+              <div className="flex h-full flex-col">
                 <div>
                   <h3 className="mb-2 text-lg font-semibold">
                     {pinnedPost.name}
                   </h3>
-                  <p className="mb-4 text-sm text-gray-600">
+                  <p className="mb-2 text-sm text-gray-600">
                     {pinnedPost.description}
                   </p>
                   <p className="text-gray-600">
@@ -82,7 +82,7 @@ const PinnedPost: React.FC = () => {
                     {(pinnedPost.price * 15000).toLocaleString()}
                   </p>
                 </div>
-                <div className="mt-auto flex justify-between gap-3">
+                <div className="mt-2 flex h-[calc(100%-12rem)] justify-between gap-3">
                   <Link
                     href={`/products/${pinnedPost.id}/${pinnedPost.name.replace(
                       /\s+/g,

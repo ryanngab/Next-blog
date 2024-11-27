@@ -78,14 +78,17 @@ const CardBlog: React.FC<CardBlogProps> = ({ post }) => {
           className="h-48 w-full rounded-lg object-cover"
           loading="lazy"
         />
-        <div className="absolute right-2 top-2 z-10">
+        <div className="absolute right-2 top-2 z-10 flex">
           <button
+            onClick={(e) => e.stopPropagation()}
             aria-label="Bookmark"
             className="mr-2 rounded-full bg-white p-2 transition hover:bg-gray-100 hover:shadow-xl"
           >
             <Bookmark className="h-5 w-5 text-gray-800" />
           </button>
-          <ShareModalWithIcon url={`/blog/${post.title}`} />
+          <div className="" onClick={(e) => e.stopPropagation()}>
+            <ShareModalWithIcon url={`/blog/${post.title}`} />
+          </div>
         </div>
       </div>
       <div className="flex h-[calc(100%-12rem)] flex-col justify-between">
